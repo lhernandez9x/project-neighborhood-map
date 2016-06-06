@@ -71,44 +71,47 @@ var viewModel = function() {
 
         //This creates markers for each one of our model items.
         model.places.forEach(function(lat, index) {
-            elem = model.places[index];
-            markerImg = elem.icon;
-            markerLat = elem.lat;
-            markerLng = elem.lng;
-            title = elem.title;
-            latLng = {
-                lat: markerLat,
-                lng: markerLng
-            };
+                elem = model.places[index];
+                markerImg = elem.icon;
+                markerLat = elem.lat;
+                markerLng = elem.lng;
+                title = elem.title;
+                latLng = {
+                    lat: markerLat,
+                    lng: markerLng
+                };
 
-            marker = new google.maps.Marker({
-                map: map,
-                position: latLng,
-                title: title,
-                icon: markerImg
+                marker = new google.maps.Marker({
+                    map: map,
+                    position: latLng,
+                    title: title,
+                    icon: markerImg
+                })
+                allMarkers.push(marker);
+
+                //This adds a click event listenere to each marker and appends the infowindow to the bottom of the page.
+                marker.addListener('click', function() {
+                    map.setCenter(this.position);
+                    setTimeout(function() {
+                        (function() {
+                        if (isMobile() === true) {
+                            return map.panBy(0, 225);
+                        } else {
+                            return map.panBy(0, 400);
+                        }
+                    })();
+                    }, 1);
+                    (function() {
+                        if (isMobile() === true) {
+                            return map.setZoom(19);
+                        } else {
+                            return map.setZoom(20);
+                        }
+                    })();
+                })
             })
-            allMarkers.push(marker);
-
-            //This adds a click event listenere to each marker and appends the infowindow to the bottom of the page.
-            marker.addListener('click', function() {
-                map.setCenter(this.position);
-                setTimeout(function() {
-                    map.panBy(0, 225);
-                }, 1);
-                map.setZoom(19);
-            })
-            
-
-        });
-
-
-        //This adds a click event listenere to each marker and appends the infowindow to the bottom of the page.
-
-
-
-
+            // End of init(map)
     };
-    // This iterates through our model and creates list items that show the info on each of our locations
 
 
     initMap()
