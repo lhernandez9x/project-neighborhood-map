@@ -41,6 +41,7 @@
             }
 
             #initial-page h1 {
+                padding:0;
                 font-family: 'Rancho', cursive;
             }
 
@@ -61,15 +62,15 @@
                     background-size: cover;
 
                 }
-                h1 {
+                #initial-page h1 {
                     font-size: 3em;
                     margin-bottom: 10%;
-                    color: #f1c40f;
+                    color: #c0392b;
                     text-shadow: 0 0 100px #bdc3c7;
                 }
                 #initial-page p {
                     font-family: 'Open Sans', sans-serif;
-                    margin-top: 75%;
+                    margin-top: 60%;
                     padding:0 2%;
                     font-size: 1em;
                     color:#fff;
@@ -78,9 +79,9 @@
                     font-family: 'Open Sans', sans-serif;
                     margin-top: 1%;
                     padding: 3% 5%;
-                    border: solid 2px #e74c3c;
+                    border: solid 2px #c0392b;
                     background: none;
-                    color: #e74c3c;
+                    color: #c0392b;
                 }
             }
         </style>
@@ -91,14 +92,16 @@
         <nav id="menu"><img src="images/menu.png" alt="Menu Icon"></nav>
     </header>
     <section id="initial-page">
-        <h1>El Paso, Tx</h1>
+        <h1>El Paso Historical <br> Neighborhood Map</h1>
         <p>El Paso, located at the western tip of Texas, is a city rich in history. El Paso was first inhabited back in 1598. It was a bussling cow-town during the Old West, and it's still a thriving city today. Let's begin an adventure through time.</p>
         <button id="explore-btn">Click to Start Exploring</button>
     </section>
     <section id="map">
     </section>
     <aside id="aside">
+        <ul data-bind=""></ul>
     </aside>
+    <div id="info-window"></div>
     <!--    Script Tags-->
         <script>
         var bodyElem = document.body,
