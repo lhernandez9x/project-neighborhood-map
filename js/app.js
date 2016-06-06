@@ -25,8 +25,8 @@ var model = {
         title: 'Plaza Theatre',
         description: '',
         category: [],
-        lat: 31.7589099,
-        lng: -106.489631,
+        lat: 31.758651,
+        lng: -106.489380,
         icon: 'images/markers/star.png'
     }, {
         title: 'Winhgam Theatre',
@@ -52,7 +52,8 @@ var viewModel = function() {
 
     function initMap() {
 
-        var map;
+        var map, elem, marker, markerImg, markerLat, markerLng, title, latLng;
+        var allMarkers = [];
         //This initiates the map and map options.
         map = new google.maps.Map(document.getElementById('map'), {
             center: {
@@ -69,9 +70,7 @@ var viewModel = function() {
         });
 
         //This creates markers for each one of our model items.
-
         model.places.forEach(function(lat, index) {
-            var elem, marker,markerImg, markerLat, markerLng, title, latLng;
             elem = model.places[index];
             markerImg = elem.icon;
             markerLat = elem.lat;
@@ -80,7 +79,7 @@ var viewModel = function() {
             latLng = {
                 lat: markerLat,
                 lng: markerLng
-            }
+            };
 
             marker = new google.maps.Marker({
                 map: map,
@@ -88,10 +87,31 @@ var viewModel = function() {
                 title: title,
                 icon: markerImg
             })
-    });
-};
+            allMarkers.push(marker);
 
-initMap()
+            //This adds a click event listenere to each marker and appends the infowindow to the bottom of the page.
+            marker.addListener('click', function() {
+                map.setCenter(this.position);
+                setTimeout(function() {
+                    map.panBy(0, 225);
+                }, 1);
+                map.setZoom(19);
+            })
+            
+
+        });
+
+
+        //This adds a click event listenere to each marker and appends the infowindow to the bottom of the page.
+
+
+
+
+    };
+    // This iterates through our model and creates list items that show the info on each of our locations
+
+
+    initMap()
 };
 
 
