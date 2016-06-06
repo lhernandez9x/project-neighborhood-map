@@ -1,0 +1,27 @@
+nav{
+    position: fixed;
+    z-index: 100000 !important;
+    right: 2%;
+    top: 2%;
+}
+#map {
+    height: 100vh;
+    width:80%;
+}
+aside{
+    background:#7f8c8d;
+    width:20%;
+    height:100vh;
+}
+@media only screen and (max-width: 640px) {
+    nav img{
+        width: 50px;
+    }
+    #map{
+        width:100%;
+    }
+    aside {
+        visibility:hidden;
+        width:0%;
+    }
+}
