@@ -89,7 +89,8 @@
 
 <body>
     <header>
-        <nav id="menu"><img src="images/menu.png" alt="Menu Icon"></nav>
+        <nav id="nav-bar"><img src="images/menu.png" alt="Menu Icon">
+        <ul id="menu" data-bind=""></ul></nav>
     </header>
     <section id="initial-page">
         <h1>El Paso Historical <br> Neighborhood Map</h1>
@@ -98,10 +99,8 @@
     </section>
     <section id="map">
     </section>
-    <aside id="aside">
-        <ul data-bind=""></ul>
-    </aside>
-    <div id="info-window"></div>
+    <section id="info-section"></section>
+    
     <!--    Script Tags-->
         <script>
         var bodyElem = document.body,
@@ -112,6 +111,9 @@
         });
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlCLIDC79QmG6TvNSfymRpKR3hjvFCaSY"></script>
-    <script src="js/app.js"></script>
+    <script src="js//model/model.js"></script>
+    <script src="js/viewModels/map.js"></script>
+    <script src="js/viewModels/app.js"></script>
+    <script src="js/app-view.js"></script>
 </body>
 </html>
