@@ -6,12 +6,17 @@ nav{
 }
 #map {
     height: 100vh;
-    width:80%;
+    width:100%;
 }
-aside{
+#menu{
     background:#7f8c8d;
     width:20%;
     height:100vh;
+    display: none;
+    z-index: 100000 !important;
+}
+#menu:hover{
+    display: block;
 }
 @media only screen and (max-width: 640px) {
     nav img{
@@ -24,4 +29,26 @@ aside{
         visibility:hidden;
         width:0%;
     }
+}
+
+/* This is the style for the info window */
+.info-window{
+    background: #fff;
+    color: #323232;
+    z-index:100000000 !important;
+    position:absolute;
+    width:90%;
+    height:60vh;
+    bottom:0;
+    padding: 1% 5%;
+    box-shadow: 2px 2px 10px #323232;
+}
+.info-window h3{
+    text-align: center;
+    background: #c0392b;
+    color:#fff;
+    width:100%;
+    padding: 3% 0;
+    margin:0;
+    font-family: 'Open Sans', sans-serif;
 }
