@@ -49,6 +49,16 @@ nav{
     color:#fff;
     width:100%;
     padding: 3% 0;
-    margin:0;
+    margin:1% 0 0;
     font-family: 'Open Sans', sans-serif;
+}
+.info-window button{
+    background: #c0392b;
+    color:#fff;
+    border: none;
+}
+.info-window p{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1em;
+    text-align: center;
 }
