@@ -9,88 +9,88 @@
 
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
-        <style>
-            @font-face {
-                font-family: 'Rancho';
-                src: url('fonts/Rancho/Rancho.eot');
-                src: local('☺'), url('fonts/Rancho/Rancho.woff') format('woff'), url('fonts/Rancho/Rancho.ttf') format('truetype'), url('fonts/Rancho/Rancho.svg') format('svg');
-                font-weight: normal;
-                font-style: normal;
-            }
-
-            @font-face {
-                font-family: 'Open Sans';
-                src: url('fonts/Open/OpenSansRegular.eot');
-                src: url('fonts/Open/OpenSansRegular.eot') format('embedded-opentype'), url('fonts/Open/OpenSansRegular.woff2') format('woff2'), url('fonts/Open/OpenSansRegular.woff') format('woff'), url('fonts/Open/OpenSansRegular.ttf') format('truetype'), url('fonts/Open/OpenSansRegular.svg#OpenSansRegular') format('svg');
-            }
-
-            body {
-                min-height: 100vh;
-                scroll: none;
-                overflow: hidden;
-            }
-
+    <style>
+        @font-face {
+            font-family: 'Rancho';
+            src: url('fonts/Rancho/Rancho.eot');
+            src: local('☺'), url('fonts/Rancho/Rancho.woff') format('woff'), url('fonts/Rancho/Rancho.ttf') format('truetype'), url('fonts/Rancho/Rancho.svg') format('svg');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'Open Sans';
+            src: url('fonts/Open/OpenSansRegular.eot');
+            src: url('fonts/Open/OpenSansRegular.eot') format('embedded-opentype'), url('fonts/Open/OpenSansRegular.woff2') format('woff2'), url('fonts/Open/OpenSansRegular.woff') format('woff'), url('fonts/Open/OpenSansRegular.ttf') format('truetype'), url('fonts/Open/OpenSansRegular.svg#OpenSansRegular') format('svg');
+        }
+        
+        body {
+            min-height: 100vh;
+            scroll: none;
+            overflow: hidden;
+        }
+        
+        #initial-page {
+            background-image: url(images/ept-lg.jpg);
+            color: #000;
+            text-align: center;
+            height: 100vh;
+            z-index: 100 important!;
+        }
+        
+        #initial-page h1 {
+            padding: 0;
+            font-family: 'Rancho', cursive;
+        }
+        
+        #initial-page p {
+            padding: 1% 2%;
+        }
+        
+        #initial-page button {
+            padding: 3% 5%;
+            border: solid 2px #000;
+            background: none;
+            color: #000;
+        }
+        
+        @media only screen and (max-width: 480px) {
             #initial-page {
-                background-image: url(images/ept-lg.jpg);
-                color: #000;
-                text-align: center;
-                height: 100vh;
-                z-index: 10000 important!;
+                background-image: url(images/ept-sm.jpg);
+                background-size: cover;
             }
-
             #initial-page h1 {
-                padding:0;
-                font-family: 'Rancho', cursive;
+                font-size: 3em;
+                margin-bottom: 10%;
+                color: #c0392b;
+                text-shadow: 0 0 100px #bdc3c7;
             }
-
             #initial-page p {
-                padding: 1% 2%;
+                font-family: 'Open Sans', sans-serif;
+                margin-top: 60%;
+                padding: 0 2%;
+                font-size: 1em;
+                color: #fff;
             }
-
             #initial-page button {
+                font-family: 'Open Sans', sans-serif;
+                margin-top: 1%;
                 padding: 3% 5%;
-                border: solid 2px #000;
+                border: solid 2px #c0392b;
                 background: none;
-                color: #000;
+                color: #c0392b;
             }
-
-            @media only screen and (max-width: 480px) {
-                #initial-page {
-                    background-image: url(images/ept-sm.jpg);
-                    background-size: cover;
-
-                }
-                #initial-page h1 {
-                    font-size: 3em;
-                    margin-bottom: 10%;
-                    color: #c0392b;
-                    text-shadow: 0 0 100px #bdc3c7;
-                }
-                #initial-page p {
-                    font-family: 'Open Sans', sans-serif;
-                    margin-top: 60%;
-                    padding:0 2%;
-                    font-size: 1em;
-                    color:#fff;
-                }
-                #initial-page button {
-                    font-family: 'Open Sans', sans-serif;
-                    margin-top: 1%;
-                    padding: 3% 5%;
-                    border: solid 2px #c0392b;
-                    background: none;
-                    color: #c0392b;
-                }
-            }
-        </style>
+        }
+    </style>
 </head>
 
 <body>
     <header>
         <nav id="nav-bar"><img src="images/menu.png" alt="Menu Icon">
-        <ul id="menu" data-bind=""></ul></nav>
+            <ul id="menu" data-bind=""></ul>
+        </nav>
     </header>
     <section id="initial-page">
         <h1>El Paso Historical <br> Neighborhood Map</h1>
@@ -100,20 +100,21 @@
     <section id="map">
     </section>
     <section id="info-section"></section>
-    
+    <div id="search-bar"><input type="search" placeholder="search"></div>
+
     <!--    Script Tags-->
-        <script>
+    <script>
         var bodyElem = document.body,
             initialPageElem = document.getElementById('initial-page'),
             exploreElem = document.getElementById('explore-btn');
+        
         exploreElem.addEventListener('click', function() {
-            bodyElem.removeChild(initialPageElem)
+            bodyElem.removeChild(initialPageElem);
         });
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlCLIDC79QmG6TvNSfymRpKR3hjvFCaSY"></script>
     <script src="js//model/model.js"></script>
-    <script src="js/viewModels/app.js"></script>
-    <script src="js/viewModels/map.js"></script>
-    <script src="js/app-view.js"></script>
+    <script src="js/app.js"></script>
 </body>
+
 </html>
