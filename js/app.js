@@ -1,147 +1,132 @@
-var viewModel = function() {
-    var self = this;
+// Declare global variables
+var map,
+    marker,
+    markers = [],
+    infoWindow,
+    isFiltered;
 
-    // Texas History API and Information
-    var txHistURL = 'http://texashistory.unt.edu/explore/collections/EPMT/opensearch/?format=json&q=';
-
-    function txHistAPI(locationTitle) {
-        XMLHttpRequest.open("POST", txHistURL + locationTitle, true);
-        XMLHttpRequest.send();
+/**
+ * Used to check if customer is using a mobile device. If true, some of the map options will render differently to better fit mobile devices. 
+ **/
+var isMobile = function() {
+    if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i) || navigator.userAgent.match(/Opera Mini/i) || navigator.userAgent.match(/IEMobile/i)) {
+        return true;
+    } else {
+        return false;
     }
+};
 
-    var map, place, marker, placeImg, placeLat, placeLng, placeTitle, placePosition, placeDesc,
-        allMarkers = [],
-        isMobile = function() {
-            if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i) || navigator.userAgent.match(/Opera Mini/i) || navigator.userAgent.match(/IEMobile/i)) {
-                return true;
-            } else {
-                return false;
-            }
-        },
-        infoSection = document.getElementById('info-section'),
-        infoWindowElem = document.createElement('div'),
-        infoWindowTitle = document.createElement('h3'),
-        infoWindowDesc = document.createElement('p');
-    infoWindowList = document.createElement('ul'),
-        infoWindowListItem = document.createElement('li'),
-        infoWindowButton = document.createElement('button'),
-        infoButtonLabel = document.createTextNode('x');
-
-    //This initializes the map and draws it to our page.
-
-    function initMap() {
-
-        //This initiates the map and map options.
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: {
-                lat: 31.759689,
-                lng: -106.488586
-            },
-            zoom: (function() {
-                if (isMobile() === true) {
-                    return 17;
-                } else {
-                    return 18;
-                }
-            })(),
-            tilt: 5,
-            disableDefaultUI: true
-        });
-        setMarkers(map);
+//This initializes the map and draws it to our page.
+function initMap() {
+    /**
+     * Holds map center variable of El Paso Downtown
+     */
+    var elPasoDowntown = {
+        lat: 31.7583499,
+        lng: -106.487835
     };
 
-    //This creates markers for each one of our model items.
-    function setMarkers(map) {
-        model.places.forEach(function(lat, index) {
-            place = model.places[index];
-            placeImg = place.icon;
-            placeLat = place.lat;
-            placeLng = place.lng;
-            placeDesc = place.description;
-            placeTitle = place.title;
-            placePosition = {
-                lat: placeLat,
-                lng: placeLng
-            };
+    //This initiates the map and map options.
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: elPasoDowntown,
+        zoom: (function() {
+            if (isMobile() === true) {
+                return 17;
+            } else {
+                return 18;
+            }
+        })(),
+        styles: [{
+            "featureType": "poi",
+            "stylers": [{
+                "visibility": "off"
+            }]
+        }, {
+            "featureType": "poi.park",
+            "stylers": [{
+                "visibility": "on"
+            }]
+        }]
+    });
+};
 
-            marker = new google.maps.Marker({
-                map: map,
-                position: placePosition,
-                title: placeTitle,
-                icon: 'images/marker.png',
-                description: placeDesc
-            })
+/**
+ * Add markers to the map
+ */
 
-            //This adds a click event listenere to each marker and appends the infowindow to the bottom of the page.
-            marker.addListener('click', function() {
-                map.setCenter(this.position);
-                setTimeout(function() {
-                    (function() {
-                        if (isMobile() === true) {
-                            return map.panBy(0, 225);
-                        } else {
-                            return map.panBy(0, 400);
-                        }
-                    })();
-                }, 1);
-                (function() {
-                    if (isMobile() === true) {
-                        return map.setZoom(19);
-                    } else {
-                        return map.setZoom(20);
-                    }
-                })();
-                /**
-                 * This will call our API functions using the above foreach function to get appropriate title and keywords for each location.
-                 */
-                //Clean out the info window element.
-                clearInfo();
-                // this function call gathers the info for our info window.
-                setInfo(this.title, this.description);
-                txHistAPI(this.title);
-            })
-        });
+function addMarker(location) {
+    var marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        icon: 'images/marker.png',
+        animation: google.maps.Animation.DROP
+    })
+    markers.push(marker);
 
+    // bind marker to places
+    places.marker = marker;
+}
 
-        /**
-         * this cleans up our info window so there isn't any elemnets left behind
-         */
+/**
+ * This is our view model
+ */
+var viewModel = function() {
+    var self = this,
+        isFiltered;
 
-        function clearInfo() {
-            infoWindowElem.innerHTML = '';
-        };
+    // create markers for each location
 
-        /**
-         * This creates the info window and adds all of the info to it
-         */
-        function setInfo(locationTitle, locationDescription) {
-            //This creates the button that closes the info window
-            infoWindowButton.setAttribute('onclick', 'closeInfoWindow()');
-            infoWindowButton.appendChild(infoButtonLabel);
+    for (let i = 0; i < places.length; i++) {
+        var place = places[i];
 
-            // This adds the Title  and the description to their elements
-            infoWindowTitle.innerHTML = locationTitle;
-            infoWindowDesc.innerHTML = locationDescription;
-
-            //This appends all children to their parent elements
-            infoWindowElem.appendChild(infoWindowButton);
-            infoWindowElem.appendChild(infoWindowTitle);
-            infoWindowElem.appendChild(infoWindowDesc);
-            infoWindowElem.className = 'info-window';
-
-            //This appends everything in to our info window element. 
-            infoSection.appendChild(infoWindowElem);
-        };
-    }
+        //add markers to map.
+        setTimeout(addMarker(place.location), 500);
+        
+        //filter markers when filteredLocation() is run
+        if (isFiltered == true) {
+            place.marker.setVisible(true);
+        } else if (isFiltered == false) {
+            place.marker.setVisible(false);
+        }
+    };
 
     /**
-     *This function closes our info window, so user can go to other location.
+     * Gets the value in search bar and filters all locations. Once locations are filtered they will be pushed to filtered array.
      */
+    self.searchValue = ko.observable('');
 
-    function closeInfoWindow() {
-        infoSection.innerHTML = '';
-    };
-initMap();
+    self.filteredLocations = ko.computed(function() {
+        return ko.utils.arrayFilter(places, function(place) {
+            if (place.title.toLowerCase().indexOf(self.searchValue().toLowerCase()) >= 0) {
+                return true, isFiltered = true;
+            }
+        })
+        return false
+    });
+
+    /**
+     * Description
+     
+
+    function setVisibility() {
+        if (isFiltered == true) {
+            places.marker.setVisible(false);
+        } else {
+            places.marker.setVisible(true);
+        }
+    };*/
+
+
+}
+
+/**
+ *This function closes our info window, so user can go to other location.
+ */
+function closeInfoWindow() {
+    $('#info-section').html('');
 };
+
+//Initialize map on page.
+initMap();
 
 ko.applyBindings(new viewModel());
