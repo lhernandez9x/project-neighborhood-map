@@ -1,33 +1,50 @@
 nav{
-    position: fixed;
+    position:fixed;
+    top:0;
+    left:0;
     z-index: 100000 !important;
-    right: 2%;
-    top: 2%;
+    margin:0;
 }
-#map {
-    height: 100vh;
-    width:100%;
+#list-filter{
+    
+    background: #fff;
+    position: relative;
+    float:left;
+    box-shadow: 1px 1px 10px #373737;
+}
+#list-filter li{
+    display: inline-block;
+    border-right: 2px solid #323232;
+    padding: 0 2% 0 1%;
+}
+#list-filter li:last-child{
+    padding-right:0;
+    border: none;
+}
+nav img{
+    float:right;
 }
 #menu{
-    background:#7f8c8d;
-    width:20%;
-    height:100vh;
-    display: none;
-    z-index: 100000 !important;
+    margin-left:48%;
+    width: 50%;
+    overflow: hidden;
 }
 #menu:hover{
     display: block;
 }
+#menu li{
+    background: #c0392b;
+    width: 100%;
+}
+
+#map {
+    height: 100vh;
+    width:100%;
+}
+
 @media only screen and (max-width: 640px) {
-    nav img{
-        width: 37px;
-    }
     #map{
         width:100%;
-    }
-    aside {
-        visibility:hidden;
-        width:0%;
     }
 }
 
@@ -73,4 +90,15 @@ nav{
     bottom:0;
     left:0;
     z-index:101;
+}
+
+/* Lists */
+ul,
+ol{
+    list-style: none;
+}
+
+/*Clear*/
+.cf{
+    clear: both;
 }
