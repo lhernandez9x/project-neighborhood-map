@@ -55,25 +55,38 @@ function initMap() {
  * Add markers to the map
  */
 
-function addMarker(location) {
+function addMarker(i, location) {
     var marker = new google.maps.Marker({
         position: location,
         map: map,
         icon: 'images/marker.png',
-        animation: google.maps.Animation.DROP
+        animation: google.maps.Animation.DROP,
+        visible: false
     })
     markers.push(marker);
 
     // bind marker to places
-    places.marker = marker;
+    places[i].marker = marker;
+}
+
+function displayMarkers() {
+    this.marker = places.marker;
+    this.marker.setVisible(true);
+}
+
+function hideMarkers() {
+    this.marker = places.marker;
+    this.marker.setVisible(false);
 }
 
 /**
  * This is our view model
  */
 var viewModel = function() {
-    var self = this,
-        isFiltered;
+    var self = this;
+
+    //observable arry that holds all locations
+    self.unfilteredLocations = ko.observableArray();
 
     // create markers for each location
 
@@ -81,7 +94,9 @@ var viewModel = function() {
         place = places[i];
 
         //add markers to map.
-        addMarker(place.location);
+        addMarker(i, place.location);
+        
+        self.unfilteredLocations().push(place)
     };
 
     /**
@@ -90,17 +105,28 @@ var viewModel = function() {
     self.searchValue = ko.observable('');
 
     self.filteredLocations = ko.computed(function() {
-        return ko.utils.arrayFilter(places, function(place) {
-            if (place.title.toLowerCase().indexOf(self.searchValue().toLowerCase()) >= 0) {
-                places.marker.setVisible(true); // set marker to be visible.
-                console.log(places.marker.visible);
-                return true;
-            } else {
-                places.marker.setVisible(false); // sets marker to be hidden
+        var filter = self.searchValue().toLowerCase(),
+            filteredList,
+            location;
+
+        if (!filter) {
+            for (let i = 0; i < places.length; i++) {
+                location = places[i].marker;
+                location.setVisible(true);
+                filteredList = self.unfilteredLocations();
             }
-            return false;
-        })
-    });
+        } else {
+            filteredList = ko.utils.arrayFilter(places, function(place) {
+                if (place.title.toLowerCase().indexOf(filter) != -1) {
+                    place.marker.setVisible(true);
+                    return true;
+                } else {
+                    place.marker.setVisible(false);
+                } return false;
+            })
+        }
+        return filteredList;
+    })
 }
 
 /**
