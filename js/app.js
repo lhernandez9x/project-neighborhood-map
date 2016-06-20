@@ -1,5 +1,6 @@
 // Declare global variables
 var map,
+    place,
     marker,
     markers = [],
     infoWindow,
@@ -77,17 +78,10 @@ var viewModel = function() {
     // create markers for each location
 
     for (let i = 0; i < places.length; i++) {
-        var place = places[i];
+        place = places[i];
 
         //add markers to map.
-        setTimeout(addMarker(place.location), 500);
-        
-        //filter markers when filteredLocation() is run
-        if (isFiltered == true) {
-            place.marker.setVisible(true);
-        } else if (isFiltered == false) {
-            place.marker.setVisible(false);
-        }
+        addMarker(place.location);
     };
 
     /**
@@ -98,25 +92,15 @@ var viewModel = function() {
     self.filteredLocations = ko.computed(function() {
         return ko.utils.arrayFilter(places, function(place) {
             if (place.title.toLowerCase().indexOf(self.searchValue().toLowerCase()) >= 0) {
-                return true, isFiltered = true;
+                places.marker.setVisible(true); // set marker to be visible.
+                console.log(places.marker.visible);
+                return true;
+            } else {
+                places.marker.setVisible(false); // sets marker to be hidden
             }
+            return false;
         })
-        return false
     });
-
-    /**
-     * Description
-     
-
-    function setVisibility() {
-        if (isFiltered == true) {
-            places.marker.setVisible(false);
-        } else {
-            places.marker.setVisible(true);
-        }
-    };*/
-
-
 }
 
 /**
