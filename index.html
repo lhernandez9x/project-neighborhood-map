@@ -17,12 +17,12 @@
 <body>
     <header>
         <nav id="nav-bar">
-            <form>
+            <form id="search-box">
                 <input type="search" placeholder="Filter Locations" data-bind="textInput: searchValue, valueUpdate: keyup"/>
             </form>
             <img src="images/menu.png" alt="Menu Icon">
             <ul id="menu" class="cf" data-bind="foreach: filteredLocations()">
-                <li data-bind="text: title"></li>
+                <li data-bind="text: title, click: currentMarker"></li>
             </ul>
         </nav>
     </header>
@@ -31,7 +31,6 @@
     </section>
     <div id="info-section"></div>
     <!--    Script Tags-->
-    
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlCLIDC79QmG6TvNSfymRpKR3hjvFCaSY"></script>
     <script src="js//model/model.js"></script>
     <script src="js/app.js"></script>

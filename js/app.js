@@ -5,6 +5,7 @@ var map,
     markers = [],
     currentMarker;
 
+
 /**
  * Used to check if customer is using a mobile device. If true, some of the map options will render differently to better fit mobile devices. 
  **/
@@ -54,9 +55,9 @@ function initMap() {
  * Add markers to the map
  */
 
-function addMarker(i, location, timeout) {
+function addMarker(i, location) {
     var marker = new google.maps.Marker({
-        position: location,
+        position: location.location,
         map: map,
         icon: 'images/marker.png',
         animation: google.maps.Animation.DROP
@@ -69,7 +70,7 @@ function addMarker(i, location, timeout) {
 
     //This adds a click event listener to each marker
     marker.addListener('click', function() {
-        map.setCenter(location);
+        map.setCenter(location.location);
         (function() {
             if (isMobile() === true) {
                 return map.setZoom(19);
@@ -78,6 +79,7 @@ function addMarker(i, location, timeout) {
             }
         })();
         toggleBounce();
+        infoWindow(location);
     });
 
     function toggleBounce() {
@@ -97,13 +99,27 @@ function addMarker(i, location, timeout) {
 /**
  * Add infoWindow to each marker and list item
  */
-function infoWindow(i, location) {
+function infoWindow(location) {
     var locationName = location.title,
         locationDesc = location.description,
-        locationCategory = location.category;
+        locationCategory = location.category,
+        infoSectionElem = $('#info-section'); // gets the infoWindow element
+    infoSectionElem.html('<div class="info-window"><button class="close-button" onclick="closeInfoWindow()">x</button><button class="more-button" onclick="moreInfo()">More</button><h3 class="cf">'+locationName+'</h3><p>Categories: <em>'+locationCategory+'</em></p><p>'+locationDesc+'</p></div>');
 
 
 }
+
+/**
+ *This function closes our info window, so user can go to other location.
+ */
+function closeInfoWindow() {
+    $('#info-section').html('');
+};
+
+function moreInfo() {
+    var infoWindowElem = $('.info-window');
+    infoWindowElem.css('height', '80vh');
+};
 
 /**
  * Gets API from Texas History Online (https://texashistory.unt.edu) and inputs data into infowindow.
@@ -126,8 +142,8 @@ var viewModel = function() {
     //observable arry that holds all locations
     self.unfilteredLocations = ko.observableArray();
 
-    // iterates through our model to get API info for each location 
-    // and creates markers, unfilteredLocations, and infowindows.
+    // iterates through our model to get API info for each location
+    // and creates markers, unfilteredLocations
 
     for (let i = 0; i < places.length; i++) {
         place = places[i];
@@ -136,14 +152,11 @@ var viewModel = function() {
         txHistAPI(place)
 
         //add markers to map.
-        addMarker(i, place.location, i * 200);
+        addMarker(i, place);
 
         // pushes all locations to array
         //used for initial and unfiltered lists and markers
-        self.unfilteredLocations().push(place)
-
-        //add an infoWindow for our model items
-        infoWindow(i, place)
+        self.unfilteredLocations().push(place);
     };
 
     /**
@@ -177,13 +190,6 @@ var viewModel = function() {
     })
 
 }
-
-/**
- *This function closes our info window, so user can go to other location.
- */
-function closeInfoWindow() {
-    $('#info-section').html('');
-};
 
 //Initialize map on page.
 initMap();
