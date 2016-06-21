@@ -3,8 +3,7 @@ var map,
     place,
     marker,
     markers = [],
-    infoWindow,
-    isFiltered;
+    currentMarker;
 
 /**
  * Used to check if customer is using a mobile device. If true, some of the map options will render differently to better fit mobile devices. 
@@ -55,29 +54,68 @@ function initMap() {
  * Add markers to the map
  */
 
-function addMarker(i, location) {
+function addMarker(i, location, timeout) {
     var marker = new google.maps.Marker({
         position: location,
         map: map,
         icon: 'images/marker.png',
-        animation: google.maps.Animation.DROP,
-        visible: false
+        animation: google.maps.Animation.DROP
     })
+
     markers.push(marker);
 
     // bind marker to places
     places[i].marker = marker;
+
+    //This adds a click event listener to each marker
+    marker.addListener('click', function() {
+        map.setCenter(location);
+        (function() {
+            if (isMobile() === true) {
+                return map.setZoom(19);
+            } else {
+                return map.setZoom(20);
+            }
+        })();
+        toggleBounce();
+    });
+
+    function toggleBounce() {
+        if (marker.getAnimation() !== null) {
+            marker.setAnimation(null);
+        } else {
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function() {
+                marker.setAnimation(null);
+            }, 1420);
+        }
+    }
 }
 
-function displayMarkers() {
-    this.marker = places.marker;
-    this.marker.setVisible(true);
+
+
+/**
+ * Add infoWindow to each marker and list item
+ */
+function infoWindow(i, location) {
+    var locationName = location.title,
+        locationDesc = location.description,
+        locationCategory = location.category;
+
+
 }
 
-function hideMarkers() {
-    this.marker = places.marker;
-    this.marker.setVisible(false);
+/**
+ * Gets API from Texas History Online (https://texashistory.unt.edu) and inputs data into infowindow.
+ */
+function txHistAPI(location) {
+    var url = 'https://texashistory.unt.edu/explore/collections/EPMT/opensearch/?q=' + location.title + '&format=json'
 }
+
+/**
+ * Gets API from FourSquare and inputs data into infowindow.
+ */
+
 
 /**
  * This is our view model
@@ -88,15 +126,24 @@ var viewModel = function() {
     //observable arry that holds all locations
     self.unfilteredLocations = ko.observableArray();
 
-    // create markers for each location
+    // iterates through our model to get API info for each location 
+    // and creates markers, unfilteredLocations, and infowindows.
 
     for (let i = 0; i < places.length; i++) {
         place = places[i];
 
+        //API calls for Texas History and Foursquare
+        txHistAPI(place)
+
         //add markers to map.
-        addMarker(i, place.location);
-        
+        addMarker(i, place.location, i * 200);
+
+        // pushes all locations to array
+        //used for initial and unfiltered lists and markers
         self.unfilteredLocations().push(place)
+
+        //add an infoWindow for our model items
+        infoWindow(i, place)
     };
 
     /**
@@ -122,11 +169,13 @@ var viewModel = function() {
                     return true;
                 } else {
                     place.marker.setVisible(false);
-                } return false;
+                }
+                return false;
             })
         }
         return filteredList;
     })
+
 }
 
 /**
