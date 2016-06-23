@@ -1,33 +1,49 @@
 nav{
-    position: fixed;
+    background: #fff;
+    position:fixed;
+    top:0;
+    left:0;
+    height: 10%;
+    max-width: 100vw;
+    padding:2% 0 0 2%;
     z-index: 100000 !important;
-    right: 2%;
-    top: 2%;
 }
-#map {
-    height: 100vh;
-    width:100%;
+nav *{
+    display: -webkit-inline-box;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+}
+#search-box{
+    padding:0;
+}
+
+nav img{
+    position: fixed;
+    float:right;
 }
 #menu{
-    background:#7f8c8d;
-    width:20%;
-    height:100vh;
-    display: none;
-    z-index: 100000 !important;
+    margin-left:48%;
+    width: 50%;
+    overflow: hidden;
 }
 #menu:hover{
     display: block;
 }
+#menu li{
+    background: #c0392b;
+    display: list-item;
+    width: 100%;
+}
+
+#map {
+    height: 100vh;
+    width:100%;
+}
+
 @media only screen and (max-width: 640px) {
-    nav img{
-        width: 37px;
-    }
     #map{
         width:100%;
-    }
-    aside {
-        visibility:hidden;
-        width:0%;
     }
 }
 
@@ -38,8 +54,9 @@ nav{
     z-index:100 !important;
     position:absolute;
     width:90%;
-    height:60vh;
-    bottom:12%;
+    height:11vh;
+    bottom:0;
+    overflow: hidden;
     padding: 1% 5%;
     box-shadow: 2px 2px 10px #323232;
 }
@@ -50,21 +67,29 @@ nav{
     color:#fff;
     width:100%;
     padding: 3% 0;
-    margin:1% 0 0;
+    margin-top:1%;
     font-family: 'Open Sans', sans-serif;
 }
 .info-window button{
     background: #c0392b;
     color:#fff;
-    width:37px;
-    
     border: none;
+}
+.close-button{
+    width:37px;
+    margin-right:2%;
+}
+.more-button{
+    width:50px;
 }
 .info-window p{
     font-family: 'Open Sans', sans-serif;
     font-size: .75em;
     text-align: center;
 }
+
+
+/* Search Bar */
 #search-bar{
     position: absolute;
     height:10%;
@@ -73,4 +98,16 @@ nav{
     bottom:0;
     left:0;
     z-index:101;
+}
+
+
+/* Lists */
+ul,
+ol{
+    list-style: none;
+}
+
+/*Clear*/
+.cf{
+    clear: both;
 }
