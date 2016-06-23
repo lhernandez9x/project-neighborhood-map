@@ -3,7 +3,9 @@ var map,
     place,
     marker,
     markers = [],
-    currentMarker;
+    currentMarker,
+    txHistArticles = [],
+    foursquareVenues = [];
 
 
 /**
@@ -99,13 +101,34 @@ function addMarker(i, location) {
 /**
  * Add infoWindow to each marker and list item
  */
-function infoWindow(location) {
-    var locationName = location.title,
-        locationDesc = location.description,
-        locationCategory = location.category,
+function infoWindow(place) {
+    var locationName = place.title,
+        locationDesc = place.description,
+        locationCategory = place.category,
+        txHistURL = 'https://texashistory.unt.edu/explore/collections/EPMT/opensearch/?q=' + place.title + '&format=json',
         infoSectionElem = $('#info-section'); // gets the infoWindow element
-    infoSectionElem.html('<div class="info-window"><button class="close-button" onclick="closeInfoWindow()">x</button><button class="more-button" onclick="moreInfo()">More</button><h3 class="cf">'+locationName+'</h3><p>Categories: <em>'+locationCategory+'</em></p><p>'+locationDesc+'</p></div>');
+    infoSectionElem.html('<div class="info-window"><button class="close-button" onclick="closeInfoWindow()">x</button><button class="more-button" onclick="moreInfo()">More</button><h3 class="cf">' + locationName + '</h3><p>Categories: <em>' + locationCategory + '</em></p><p class="location-desc">' + locationDesc + '</p><div id="articles"><h4>Click to see articles about ' + locationName + '</h4></div></div>');
 
+    /**
+     * This calls the api and inputs info into the corresponding info window.
+     */
+    $.ajax({
+        url: txHistURL,
+    }).success(function(data) {
+        var articleList = data.feed.entry;
+
+        // iterates through API response and inputs info into the info window
+        for (let i = 0; i < articleList.length; i++) {
+            var articles = articleList[i],
+                articleLink = articles.link,
+                articleImg = articles.thumbnail,
+                articleElem = '<a href="' + articleLink + 'hits/?q=' + locationName + '"><img src="' + articleImg + '"></a>'
+            $(articleElem).insertAfter('#articles');
+
+        }
+    }).error(function() {
+        $('<h2 align="center">Texas History Articles could not be loaded. Please check your internet connection</h2>').insertAfter('.location-desc');
+    })
 
 }
 
@@ -116,17 +139,32 @@ function closeInfoWindow() {
     $('#info-section').html('');
 };
 
+/**
+ * Increases the height of the infoWindow to 90vh in order to show the rest of the information
+ */
+
 function moreInfo() {
     var infoWindowElem = $('.info-window');
     infoWindowElem.css('height', '80vh');
 };
 
 /**
- * Gets API from Texas History Online (https://texashistory.unt.edu) and inputs data into infowindow.
+ * Gets APIs from Texas History Online (https://texashistory.unt.edu) and pushes info into an array to be called within the infoWindow.
  */
-function txHistAPI(location) {
-    var url = 'https://texashistory.unt.edu/explore/collections/EPMT/opensearch/?q=' + location.title + '&format=json'
-}
+//function getAPI(place) {
+//    var txHistURL = 'https://texashistory.unt.edu/explore/collections/EPMT/opensearch/?q=' + place.title + '&format=json'
+//    $.ajax({
+//        url: txHistURL,
+//    }).success(function(data){
+//        var articleList = data.feed.entry;
+//        for (let i = 0; i < articleList.length; i++){
+//            var articles = articleList[i];
+//            txHistArticles.push({name: place.title, link: articles.link, thumbnail: articles.thumbnail});
+//            console.log(txHistArticles);
+//            console.log(txHistArticles.length);
+//        }
+//    })
+//}
 
 /**
  * Gets API from FourSquare and inputs data into infowindow.
@@ -149,7 +187,7 @@ var viewModel = function() {
         place = places[i];
 
         //API calls for Texas History and Foursquare
-        txHistAPI(place)
+        //getAPI(place)
 
         //add markers to map.
         addMarker(i, place);
@@ -157,6 +195,11 @@ var viewModel = function() {
         // pushes all locations to array
         //used for initial and unfiltered lists and markers
         self.unfilteredLocations().push(place);
+
+        self.currentLocation = ko.observable();
+        self.setCurrentLocation = ko.computed(function() {
+            self.currentLocation = place.marker;
+        });
     };
 
     /**

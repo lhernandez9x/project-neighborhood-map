@@ -87,6 +87,9 @@ nav img{
     font-size: .75em;
     text-align: center;
 }
+
+
+/* Search Bar */
 #search-bar{
     position: absolute;
     height:10%;
@@ -96,6 +99,7 @@ nav img{
     left:0;
     z-index:101;
 }
+
 
 /* Lists */
 ul,
