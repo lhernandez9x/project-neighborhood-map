@@ -15,17 +15,17 @@
 </head>
 
 <body>
-    <header>
-        <nav id="nav-bar">
+        <aside id="nav-bar">
             <form id="search-box">
-                <input type="search" placeholder="Filter Locations" data-bind="textInput: searchValue, valueUpdate: keyup"/>
+                <input type="search" placeholder="Filter Locations" data-bind="textInput: searchValue, valueUpdate: keyup" />
             </form>
-            <img src="images/menu.png" alt="Menu Icon">
-            <ul id="menu" class="cf" data-bind="foreach: filteredLocations()">
-                <li data-bind="text: title"></li>
-            </ul>
-        </nav>
-    </header>
+            <img src="images/menu.png" alt="Menu Icon" onclick="openMenu()">
+            <div id="menu-bar">
+                <ul class="menu" data-bind="foreach: filteredLocations()">
+                    <li class="menu-item" data-bind="text: title" onclick="hideMenu()"></li>
+                </ul>
+            </div>
+        </aside>
     <!--Initial page code goes here-->
     <section id="map">
     </section>
