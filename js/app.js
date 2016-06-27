@@ -15,7 +15,7 @@ function openMenu() {
         $('#menu-bar').css('background', 'rgba(0,0,0,.7)');
         $('#menu-bar').css('transform', 'translateX(0vw)');
         $('.menu').css('transform', 'translateX(0vw)');
-    } else{
+    } else {
         $('#menu-bar').css('background', 'rgba(255,255,255,1)');
         $('#menu-bar').css('transform', 'translateX(0vw)');
         $('.menu').css('transform', 'translateX(0vw)');
@@ -23,12 +23,12 @@ function openMenu() {
 }
 
 function hideMenu() {
-    if (isMobile() == true){
-    $('#menu-bar').removeAttr('style');
-    $('.menu').css('transform', 'translateX(100vw)');
+    if (isMobile() == true) {
+        $('#menu-bar').removeAttr('style');
+        $('.menu').css('transform', 'translateX(100vw)');
     } else {
         $('#menu-bar').removeAttr('style');
-    $('.menu').css('transform', 'translateX(-20vw)');
+        $('.menu').css('transform', 'translateX(-20vw)');
     }
 }
 /**
@@ -47,10 +47,19 @@ function initMap() {
     /**
      * Holds map center variable of El Paso Downtown
      */
-    var elPasoDowntown = {
-        lat: 31.7584309,
-        lng: -106.4871108
-    };
+    var elPasoDowntown = (function() {
+        if (isMobile() == false) {
+            return {
+                lat: 31.7584309,
+                lng: -106.4871108
+            }
+        } else {
+            return {
+                lat: 31.7583499,
+                lng: -106.487835
+            }
+        }
+    })();
 
     //This initiates the map and map options.
     map = new google.maps.Map(document.getElementById('map'), {
@@ -189,8 +198,9 @@ function closeInfoWindow() {
 
 function moreInfo() {
     var infoWindowElem = $('.info-window');
-    infoWindowElem.css('height', '80vh');
-    infoWindowElem.css('overflow', 'scroll')
+    infoWindowElem.css('top', '10vh')
+    infoWindowElem.css('height', '100vh');
+    infoWindowElem.css('overflow', 'scroll');
 };
 
 /**
