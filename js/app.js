@@ -1,15 +1,38 @@
+'use strict';
+
 // Declare global variables
 var map,
     place,
     marker,
     markers = [],
-    currentMarker,
-    txHistArticles = [],
-    foursquareVenues = [];
+    currentMarker = ko.observable(),
+    txHistArticles = [];
 
+// ANy additional scripts for our view will be housed here.
 
+function openMenu() {
+    if (isMobile() == true) {
+        $('#menu-bar').css('background', 'rgba(0,0,0,.7)');
+        $('#menu-bar').css('transform', 'translateX(0vw)');
+        $('.menu').css('transform', 'translateX(0vw)');
+    } else{
+        $('#menu-bar').css('background', 'rgba(255,255,255,1)');
+        $('#menu-bar').css('transform', 'translateX(0vw)');
+        $('.menu').css('transform', 'translateX(0vw)');
+    }
+}
+
+function hideMenu() {
+    if (isMobile() == true){
+    $('#menu-bar').removeAttr('style');
+    $('.menu').css('transform', 'translateX(100vw)');
+    } else {
+        $('#menu-bar').removeAttr('style');
+    $('.menu').css('transform', 'translateX(-20vw)');
+    }
+}
 /**
- * Used to check if customer is using a mobile device. If true, some of the map options will render differently to better fit mobile devices. 
+ * Used to check if user is on a mobile device. If true, some of the map options will render differently to better fit mobile devices. 
  **/
 var isMobile = function() {
     if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i) || navigator.userAgent.match(/Opera Mini/i) || navigator.userAgent.match(/IEMobile/i)) {
@@ -25,8 +48,8 @@ function initMap() {
      * Holds map center variable of El Paso Downtown
      */
     var elPasoDowntown = {
-        lat: 31.7583499,
-        lng: -106.487835
+        lat: 31.7584309,
+        lng: -106.4871108
     };
 
     //This initiates the map and map options.
@@ -96,21 +119,21 @@ function addMarker(i, location) {
     }
 }
 
-
-
 /**
  * Add infoWindow to each marker and list item
  */
 function infoWindow(place) {
     var locationName = place.title,
+        locationCity = ' El Paso TX',
         locationDesc = place.description,
         locationCategory = place.category,
-        txHistURL = 'https://texashistory.unt.edu/explore/collections/EPMT/opensearch/?q=' + place.title + '&format=json',
+        txHistURL = 'https://texashistory.unt.edu/explore/collections/EPMT/opensearch/?q=' + place.title + '&format=json', // API url for Texas History
+        fourSquareURL = 'https://api.foursquare.com/v2/venues/search?ll=' + place.location.lat + ',' + place.location.lng, // API url for Foursquare
         infoSectionElem = $('#info-section'); // gets the infoWindow element
-    infoSectionElem.html('<div class="info-window"><button class="close-button" onclick="closeInfoWindow()">x</button><button class="more-button" onclick="moreInfo()">More</button><h3 class="cf">' + locationName + '</h3><p>Categories: <em>' + locationCategory + '</em></p><p class="location-desc">' + locationDesc + '</p><div id="articles"><h4>Click to see articles about ' + locationName + '</h4></div></div>');
+    infoSectionElem.html('<div class="info-window"><button class="close-button" onclick="closeInfoWindow()">x</button><button class="more-button" onclick="moreInfo()">More</button><h3 class="cf">' + locationName + '</h3><p>Categories: <em>' + locationCategory + '</em></p><p class="location-desc">' + locationDesc + '</p><h3>Click below to go to the Wikipedia page for ' + locationName + '</h3><div id="articles"><h3>Click images below for more information on ' + locationName + '</h3><div id="article-images"></div></div></div>');
 
     /**
-     * This calls the api and inputs info into the corresponding info window.
+     * This calls the Texas History api and inputs info into the corresponding info window.
      */
     $.ajax({
         url: txHistURL,
@@ -123,13 +146,34 @@ function infoWindow(place) {
                 articleLink = articles.link,
                 articleImg = articles.thumbnail,
                 articleElem = '<a href="' + articleLink + 'hits/?q=' + locationName + '"><img src="' + articleImg + '"></a>'
-            $(articleElem).insertAfter('#articles');
+            $('#article-images').append(articleElem);
 
         }
     }).error(function() {
         $('<h2 align="center">Texas History Articles could not be loaded. Please check your internet connection</h2>').insertAfter('.location-desc');
     })
 
+    //Wikipedia API Call
+    var wikiURL = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + locationName + '&format=json&callback=wikiResponse',
+        wikiRequestTimeout = setTimeout(function() {
+            $('<h2 align="center">Wikipedia Articles could not be loaded. Please check your internet connection</h2>').insertAfter('.location-desc');
+        }, 8000);
+
+    $.ajax({
+        url: wikiURL,
+        dataType: 'jsonp',
+        success: function(response) {
+            var articles = response[1];
+
+            for (var i = 0; i < articles.length; i++) {
+                var articleStr = articles[i],
+                    articleURL = 'http://en.wikipedia.org/wiki/' + articleStr;
+                $('#articles').prepend('<li class="wiki-articles"><a href="' + articleURL + '">' + articleStr + '</a></li>');
+            }
+            clearInterval(wikiRequestTimeout);
+        }
+    })
+    return false;
 }
 
 /**
@@ -146,30 +190,8 @@ function closeInfoWindow() {
 function moreInfo() {
     var infoWindowElem = $('.info-window');
     infoWindowElem.css('height', '80vh');
+    infoWindowElem.css('overflow', 'scroll')
 };
-
-/**
- * Gets APIs from Texas History Online (https://texashistory.unt.edu) and pushes info into an array to be called within the infoWindow.
- */
-//function getAPI(place) {
-//    var txHistURL = 'https://texashistory.unt.edu/explore/collections/EPMT/opensearch/?q=' + place.title + '&format=json'
-//    $.ajax({
-//        url: txHistURL,
-//    }).success(function(data){
-//        var articleList = data.feed.entry;
-//        for (let i = 0; i < articleList.length; i++){
-//            var articles = articleList[i];
-//            txHistArticles.push({name: place.title, link: articles.link, thumbnail: articles.thumbnail});
-//            console.log(txHistArticles);
-//            console.log(txHistArticles.length);
-//        }
-//    })
-//}
-
-/**
- * Gets API from FourSquare and inputs data into infowindow.
- */
-
 
 /**
  * This is our view model
@@ -195,11 +217,6 @@ var viewModel = function() {
         // pushes all locations to array
         //used for initial and unfiltered lists and markers
         self.unfilteredLocations().push(place);
-
-        self.currentLocation = ko.observable();
-        self.setCurrentLocation = ko.computed(function() {
-            self.currentLocation = place.marker;
-        });
     };
 
     /**
