@@ -66,9 +66,9 @@ function initMap() {
         center: elPasoDowntown,
         zoom: (function() {
             if (isMobile() === true) {
-                return 17;
+                return 16;
             } else {
-                return 18;
+                return 17;
             }
         })(),
         styles: [{
@@ -139,7 +139,7 @@ function infoWindow(place) {
         txHistURL = 'https://texashistory.unt.edu/explore/collections/EPMT/opensearch/?q=' + place.title + '&format=json', // API url for Texas History
         fourSquareURL = 'https://api.foursquare.com/v2/venues/search?ll=' + place.location.lat + ',' + place.location.lng, // API url for Foursquare
         infoSectionElem = $('#info-section'); // gets the infoWindow element
-    infoSectionElem.html('<div class="info-window"><button class="close-button" onclick="closeInfoWindow()">x</button><button class="more-button" onclick="moreInfo()">More</button><h3 class="cf">' + locationName + '</h3><p>Categories: <em>' + locationCategory + '</em></p><p class="location-desc">' + locationDesc + '</p><h3>Click below to go to the Wikipedia page for ' + locationName + '</h3><div id="articles"><h3>Click images below for more information on ' + locationName + '</h3><div id="article-images"></div></div></div>');
+    infoSectionElem.html('<div class="info-window"><button class="close-button" onclick="closeInfoWindow()">x</button><button class="more-button" onclick="moreInfo()">More</button><h3 class="cf">' + locationName + '</h3><p><span class="category">Categories: <em>' + locationCategory + '</em></span></p><p class="location-desc">' + locationDesc + '</p><h3>Click below to go to the Wikipedia page for ' + locationName + '</h3><div id="articles"><h3>Click images below for more information on ' + locationName + '</h3><div id="article-images"></div></div></div>');
 
     /**
      * This calls the Texas History api and inputs info into the corresponding info window.
