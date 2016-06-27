@@ -13,12 +13,14 @@
     top: 0;
     left: 0;
     height: 9vh;
-    width: 17vw;
+    width: auto;
     background: #ecf0f1;
+    box-shadow: 2px 2px 5px #323232;
     z-index: 2;
 }
 
 #nav-bar img {
+    width:40px;
     display: block;
     padding: 2vh;
 }
@@ -30,19 +32,22 @@
 }
 
 #menu-bar {
-    -webkit-transform: translateX(-20vw);
-    transform: translateX(-20vw);
+    -webkit-transform: translateX(-30vw);
+    transform: translateX(-30vw);
+    box-shadow: 2px 3px 5px #323232;
+    -webkit-transition: all 400ms ease-in-out;
+    transition: all 400ms ease-in-out;
 }
 
 .menu {
     margin: 0;
     -webkit-transform: translateX(-20vw);
     transform: translateX(-20vw);
-    -webkit-transition: transform 750ms ease-in-out;
-    -webkit-transition: -webkit-transform 750ms ease-in-out;
-    transition: -webkit-transform 750ms ease-in-out;
-    transition: transform 750ms ease-in-out;
-    transition: transform 750ms ease-in-out, -webkit-transform 750ms ease-in-out;
+    -webkit-transition: all 750ms ease-in-out;
+    -webkit-transition: -webkit-all 750ms ease-in-out;
+    transition: -webkit-all 750ms ease-in-out;
+    transition: all 750ms ease-in-out;
+    transition: all 750ms ease-in-out, -webkit-all 750ms ease-in-out;
 }
 
 .menu-item {
@@ -52,6 +57,7 @@
     padding: 5px 0;
     background: #c0392b;
     border-bottom: solid 1px #fff;
+    overflow-y: scroll;
     z-index: 10;
 }
 
@@ -113,23 +119,27 @@
 }
 
 .info-window {
+    font-family: 'Open Sans', sans-serif;
     background: #ecf0f1;
     position: fixed;
     top: 0;
     right: 0;
-    overflow: scroll;
-    width: 40vh;
+    overflow-y: scroll;
+    width: 45vh;
     height: 100vh;
     box-shadow: -2px 0 5px #323232;
-    padding-right: 1vh;
+    padding-top: 10px;
 }
-
+.category{
+    font-size: .75em;
+    padding:0;
+}
 .info-window h3 {
     text-align: center;
     font-size: 1em;
     background: #c0392b;
     color: #fff;
-    width: 100%;
+    max-width: 100%;
     padding: 3% 1%;
     margin-top: 1%;
     font-family: 'Open Sans', sans-serif;
@@ -144,6 +154,8 @@
     background: #c0392b;
     color: #fff;
     border: none;
+    margin: 5px;
+    padding 1% 0;
 }
 
 .close-button {
@@ -158,17 +170,17 @@
 
 .info-window p {
     font-family: 'Open Sans', sans-serif;
-    font-size: .75em;
+    font-size: 1em;
     text-align: center;
-    padding: 5%;
+    padding: 0 5%;
 }
 
 #article-images img {
     width: 100px;
-    padding: 7% 10%;
+    padding: 7% ;
 }
 
-@media only screen and (max-width:640px) {
+@media only screen and (max-width:580px) {
     #info-section {
         position: relative;
     }
@@ -187,8 +199,8 @@
         font-size: 1em;
         background: #c0392b;
         color: #fff;
-        width: 100%;
-        padding: 3% 0;
+        max-width: 100%;
+        padding: 3% 5%;
         margin-top: 1%;
         font-family: 'Open Sans', sans-serif;
     }
@@ -206,7 +218,6 @@
         display: inline-block;
     }
     .info-window p {
-        font-family: 'Open Sans', sans-serif;
         font-size: .75em;
         text-align: center;
         padding:0;
