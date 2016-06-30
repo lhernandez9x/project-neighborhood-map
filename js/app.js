@@ -5,32 +5,34 @@ var map,
     place,
     marker,
     markers = [],
-    currentMarker = ko.observable(),
+    elPasoDowntown,
     txHistArticles = [];
 
-// ANy additional scripts for our view will be housed here.
 
+// Any additional scripts for our view will be housed here.
+
+/**
+ * Opens menu on mobile to maximize window real estate.
+ */
 function openMenu() {
     if (isMobile() == true) {
         $('#menu-bar').css('background', 'rgba(0,0,0,.7)');
         $('#menu-bar').css('transform', 'translateX(0vw)');
         $('.menu').css('transform', 'translateX(0vw)');
-    } else {
-        $('#menu-bar').css('background', 'rgba(255,255,255,1)');
-        $('#menu-bar').css('transform', 'translateX(0vw)');
-        $('.menu').css('transform', 'translateX(0vw)');
-    }
+    };
 }
+
+/**
+ * Closes menu on mobile to maximize window real estate.
+ */
 
 function hideMenu() {
     if (isMobile() == true) {
         $('#menu-bar').removeAttr('style');
         $('.menu').css('transform', 'translateX(100vw)');
-    } else {
-        $('#menu-bar').removeAttr('style');
-        $('.menu').css('transform', 'translateX(-20vw)');
-    }
+    };
 }
+
 /**
  * Used to check if user is on a mobile device. If true, some of the map options will render differently to better fit mobile devices. 
  **/
@@ -42,16 +44,17 @@ var isMobile = function() {
     }
 };
 
-//This initializes the map and draws it to our page.
+/**
+ * Google Map function and options
+ */
 function initMap() {
-    /**
-     * Holds map center variable of El Paso Downtown
-     */
-    var elPasoDowntown = (function() {
+    
+    //returns different lat and lng dependent on users browser type. (mobile or desktop)
+    elPasoDowntown = (function() {
         if (isMobile() == false) {
             return {
                 lat: 31.7584309,
-                lng: -106.4871108
+                lng: -106.4886108
             }
         } else {
             return {
@@ -61,14 +64,14 @@ function initMap() {
         }
     })();
 
-    //This initiates the map and map options.
+    //setting the map and map options
     map = new google.maps.Map(document.getElementById('map'), {
         center: elPasoDowntown,
         zoom: (function() {
             if (isMobile() === true) {
                 return 16;
             } else {
-                return 17;
+                return 18;
             }
         })(),
         styles: [{
@@ -86,45 +89,47 @@ function initMap() {
 };
 
 /**
- * Add markers to the map
+ * funtion that will create map markers and add to our map
  */
 
-function addMarker(i, location) {
+function addMarker(i, place) {
     var marker = new google.maps.Marker({
-        position: location.location,
+        position: place.location,
         map: map,
         icon: 'images/marker.png',
+        title: location.title,
         animation: google.maps.Animation.DROP
     })
 
-    markers.push(marker);
-
-    // bind marker to places
-    places[i].marker = marker;
+    places[i].marker = marker; // bind marker to places
+    markers.push(marker); // pushes markers to array
 
     //This adds a click event listener to each marker
     marker.addListener('click', function() {
-        map.setCenter(location.location);
+        map.setCenter(place.location);
         (function() {
             if (isMobile() === true) {
-                return map.setZoom(19);
+                return map.setZoom(18);
             } else {
-                return map.setZoom(20);
+                return map.setZoom(19);
             }
         })();
-        toggleBounce();
-        infoWindow(location);
-    });
+        toggleBounce(place);
+        infoWindow(place);
+    })
+}
 
-    function toggleBounce() {
-        if (marker.getAnimation() !== null) {
-            marker.setAnimation(null);
-        } else {
-            marker.setAnimation(google.maps.Animation.BOUNCE);
-            setTimeout(function() {
-                marker.setAnimation(null);
-            }, 1420);
-        }
+/**
+ * This toggles the marker bounce animation after marker has been clicked. 
+ */
+function toggleBounce(place) {
+    if (place.marker.getAnimation() !== null) {
+        place.marker.setAnimation(null);
+    } else {
+        place.marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function() {
+            place.marker.setAnimation(null);
+        }, 1420);
     }
 }
 
@@ -133,13 +138,24 @@ function addMarker(i, location) {
  */
 function infoWindow(place) {
     var locationName = place.title,
-        locationCity = ' El Paso TX',
         locationDesc = place.description,
         locationCategory = place.category,
+        infoSectionElem = $('#info-section'), // gets the infoWindow element
+
+        //API urls
         txHistURL = 'https://texashistory.unt.edu/explore/collections/EPMT/opensearch/?q=' + place.title + '&format=json', // API url for Texas History
-        fourSquareURL = 'https://api.foursquare.com/v2/venues/search?ll=' + place.location.lat + ',' + place.location.lng, // API url for Foursquare
-        infoSectionElem = $('#info-section'); // gets the infoWindow element
-    infoSectionElem.html('<div class="info-window"><button class="close-button" onclick="closeInfoWindow()">x</button><button class="more-button" onclick="moreInfo()">More</button><h3 class="cf">' + locationName + '</h3><p><span class="category">Categories: <em>' + locationCategory + '</em></span></p><p class="location-desc">' + locationDesc + '</p><h3>Click below to go to the Wikipedia page for ' + locationName + '</h3><div id="articles"><h3>Click images below for more information on ' + locationName + '</h3><div id="article-images"></div></div></div>');
+        wikiURL = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + locationName + '&limit=500&format=json&callback=wikiResponse', // API url for Wikipedia
+
+        /**
+         * Create timeout for error handling on Wikipedia API
+         */
+        wikiRequestTimeout = setTimeout(function() {
+            $('#articles').prepend('<h2 class="error">Wikipedia Articles could not be loaded. Please check your internet connection</h2>');
+        }, 8000);
+
+
+    // Appends all elements to info window
+    infoSectionElem.html('<div class="info-window"> <button class="close-button" onclick="closeInfoWindow()">x</button> <button class="more-button" onclick="moreInfo()">More</button> <h3 class="location-title">' + locationName + '</h3> <p><span class="category">Categories: <em>' + locationCategory + '</em></span></p> <p class="location-desc">' + locationDesc + '</p> <h4>Click below to go to the Wikipedia page for ' + locationName + '</h4> <div id="articles"> <h4>Click images below to see historical newspapers about ' + locationName + '</h4> <div id="article-images"></div></div></div>');
 
     /**
      * This calls the Texas History api and inputs info into the corresponding info window.
@@ -159,14 +175,10 @@ function infoWindow(place) {
 
         }
     }).error(function() {
-        $('<h2 align="center">Texas History Articles could not be loaded. Please check your internet connection</h2>').insertAfter('.location-desc');
+        $('#article-images').append('<h2 class="error">Texas History Articles could not be loaded. Please check your internet connection</h2>')// APi error handling
     })
 
     //Wikipedia API Call
-    var wikiURL = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + locationName + '&format=json&callback=wikiResponse',
-        wikiRequestTimeout = setTimeout(function() {
-            $('<h2 align="center">Wikipedia Articles could not be loaded. Please check your internet connection</h2>').insertAfter('.location-desc');
-        }, 8000);
 
     $.ajax({
         url: wikiURL,
@@ -177,7 +189,14 @@ function infoWindow(place) {
             for (var i = 0; i < articles.length; i++) {
                 var articleStr = articles[i],
                     articleURL = 'http://en.wikipedia.org/wiki/' + articleStr;
-                $('#articles').prepend('<li class="wiki-articles"><a href="' + articleURL + '">' + articleStr + '</a></li>');
+
+                if (articleStr.includes('El Paso')) {
+                    $('#articles').prepend('<li class="wiki-articles"><a href="' + articleURL + '">' + articleStr + '</a></li>');
+                } else if (articles.length == 1) {
+                    $('#articles').prepend('<li class="wiki-articles"><a href="' + articleURL + '">' + articleStr + '</a></li>');
+                } else if (articles.length === null || undefined) {
+                    $('#articles').prepend('<h4>Sorry there were 0 articles found for ' + locationName + '</h4>');
+                }
             }
             clearInterval(wikiRequestTimeout);
         }
@@ -193,7 +212,7 @@ function closeInfoWindow() {
 };
 
 /**
- * Increases the height of the infoWindow to 90vh in order to show the rest of the information
+ * Increases the height of the infoWindow in order to show the rest of the information on mobile devices
  */
 
 function moreInfo() {
@@ -218,9 +237,6 @@ var viewModel = function() {
     for (let i = 0; i < places.length; i++) {
         place = places[i];
 
-        //API calls for Texas History and Foursquare
-        //getAPI(place)
-
         //add markers to map.
         addMarker(i, place);
 
@@ -230,10 +246,23 @@ var viewModel = function() {
     };
 
     /**
+     * Calls out info window when menu item is clicked
+     */
+    self.currentMarker = ko.observable('');
+    self.setCurrentMarker = function(place) {
+        function menuClick(place) {
+            infoWindow(place);
+            map.setCenter(place.location);
+            map.setZoom(18);
+            toggleBounce(place);
+        };
+        google.maps.event.trigger(place, 'click', menuClick(place));
+    }
+
+    /**
      * Gets the value in search bar and filters all locations. Once locations are filtered they will be pushed to filtered array.
      */
     self.searchValue = ko.observable('');
-
     self.filteredLocations = ko.computed(function() {
         var filter = self.searchValue().toLowerCase(),
             filteredList,
@@ -263,5 +292,4 @@ var viewModel = function() {
 
 //Initialize map on page.
 initMap();
-
 ko.applyBindings(new viewModel());

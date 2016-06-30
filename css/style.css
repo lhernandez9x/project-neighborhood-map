@@ -1,3 +1,90 @@
+@font-face {
+    font-family: 'Rancho';
+    src: url('../fonts/Rancho/Rancho.eot');
+    src: local('☺'), url('../fonts/Rancho/Rancho.woff') format('woff'), url('../fonts/Rancho/Rancho.ttf') format('truetype'), url('../fonts/Rancho/Rancho.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('../fonts/Open/OpenSansRegular.eot');
+    src: url('../fonts/Open/OpenSansRegular.eot') format('embedded-opentype'), url('../fonts/Open/OpenSansRegular.woff2') format('woff2'), url('../fonts/Open/OpenSansRegular.woff') format('woff'), url('../fonts/Open/OpenSansRegular.ttf') format('truetype'), url('../fonts/Open/OpenSansRegular.svg#OpenSansRegular') format('svg');
+}
+
+body {
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+section:first-of-type {
+    z-index: 5 !important;
+}
+
+#initial-page {
+    background-image: url(../images/ept-lg.jpg);
+    height: 100vh;
+}
+
+#initial-page h1 {
+    margin: 0 40%;
+    color: #c0392b;
+    padding: 0;
+    font-size: 3em;
+    font-family: 'Rancho', cursive;
+}
+
+#initial-page p {
+    font-size: 1.5em;
+    margin-left: 5%;
+    padding: 1% 10%;
+}
+
+#initial-page button {
+    margin-left: 40%;
+    padding: 1% 5%;
+    border: solid 2px #c0392b;
+    background: none;
+    color: #c0392b;
+}
+
+#initial-page button:hover {
+    background: #c0392b;
+    color: #fff;
+}
+
+@media only screen and (max-width: 540px) {
+    #initial-page {
+        background-image: url(../images/ept-sm.jpg);
+        background-size: cover;
+        margin: 0;
+    }
+    #initial-page h1 {;
+        margin: 0 12%;
+        font-size: 3em;
+        padding: 15% 0;
+        color: #c0392b;
+        text-shadow: 0 0 100px #bdc3c7;
+    }
+    #initial-page p {
+        font-family: 'Open Sans', sans-serif;
+        margin-top: 30%;
+        padding: 0 2%;
+        font-size: 1em;
+        color: #fff;
+    }
+    #initial-page button {
+        font-family: 'Open Sans', sans-serif;
+        margin-top: 1%;
+        margin-left:25%;
+        padding: 3% 5%;
+        border: solid 2px #c0392b;
+        background: none;
+        color: #c0392b;
+    }
+}
+
+
 /* Map */
 
 #map {
@@ -7,82 +94,83 @@
 
 /* Navigation Styles */
 
+aside {
+    height: 100vh;
+    visibility: hidden;
+    z-index: 10;
+}
+
 #nav-bar {
     margin: 0;
     position: fixed;
     top: 0;
     left: 0;
     height: 9vh;
-    width: auto;
-    background: #ecf0f1;
-    box-shadow: 2px 2px 5px #323232;
-    z-index: 2;
+    width: 20vw;
+    background: #fff;
+    box-shadow: 1px 2px 5px #474747;
 }
 
 #nav-bar img {
-    width:40px;
+    width: 40px;
     display: block;
+    visibility: hidden;
     padding: 2vh;
 }
 
-#search-box {
+input {
     position: absolute;
-    top: 3vh;
-    left: 10vh;
+    width: 70%;
+    color: #c0392b;
+    top: 2vh;
+    left: 15%;
+    background: none;
+    padding: 10px;
+    border: solid 2px #c0392b;
 }
 
-#menu-bar {
-    -webkit-transform: translateX(-30vw);
-    transform: translateX(-30vw);
-    box-shadow: 2px 3px 5px #323232;
-    -webkit-transition: all 400ms ease-in-out;
-    transition: all 400ms ease-in-out;
+input:focus {
+    background: #c0392b;
+    color: #fff;
+    border: none;
+    outline: none;
 }
 
 .menu {
     margin: 0;
-    -webkit-transform: translateX(-20vw);
-    transform: translateX(-20vw);
-    -webkit-transition: all 750ms ease-in-out;
-    -webkit-transition: -webkit-all 750ms ease-in-out;
-    transition: -webkit-all 750ms ease-in-out;
-    transition: all 750ms ease-in-out;
-    transition: all 750ms ease-in-out, -webkit-all 750ms ease-in-out;
+    height: 100vh;
+    background: #fff;
+    box-shadow: 1px 3px 5px #474747;
 }
 
 .menu-item {
     text-align: center;
-    color: #fff;
+    color: #c0392b;
     margin: 0;
-    padding: 5px 0;
-    background: #c0392b;
-    border-bottom: solid 1px #fff;
-    overflow-y: scroll;
-    z-index: 10;
+    padding: 5px 10px;
 }
 
-.menu-item:last-child {
-    border-bottom: none;
+.menu-item:hover {
+    background: #c0392b;
+    color: #ecf0f1;
 }
 
 @media only screen and (max-width:640px) {
     #nav-bar {
-        margin: 0;
         position: fixed;
         top: 0;
         left: 0;
         height: 10vh;
         width: 100vw;
-        background: #ecf0f1;
-        z-index: 2;
     }
     #nav-bar img {
         display: block;
+        visibility: visible;
         padding: 2vh 0 0 85vw;
     }
-    #search-box {
+    input {
         position: absolute;
-        top: 3vh;
+        top: 20%;
         left: 5%;
     }
     #menu-bar {
@@ -91,6 +179,7 @@
     }
     .menu {
         margin: 0;
+        overflow-y: scroll;
         -webkit-transform: translateX(100vw);
         transform: translateX(100vw);
         -webkit-transition: transform 750ms ease-in-out;
@@ -116,25 +205,28 @@
 
 #info-section {
     position: relative;
+    z-index: 10;
 }
 
 .info-window {
     font-family: 'Open Sans', sans-serif;
-    background: #ecf0f1;
+    background: #fff;
     position: fixed;
     top: 0;
     right: 0;
     overflow-y: scroll;
     width: 45vh;
     height: 100vh;
-    box-shadow: -2px 0 5px #323232;
     padding-top: 10px;
+    box-shadow: -1px 0 5px #474747;
 }
-.category{
+
+.category {
     font-size: .75em;
-    padding:0;
+    padding: 0;
 }
-.info-window h3 {
+
+.location-title {
     text-align: center;
     font-size: 1em;
     background: #c0392b;
@@ -143,6 +235,15 @@
     padding: 3% 1%;
     margin-top: 1%;
     font-family: 'Open Sans', sans-serif;
+}
+
+.info-window h4 {
+    border-top: solid 2px #c0392b;
+    border-bottom: solid 2px #c0392b;
+    padding: 5% 2%;
+    font-size: 1em;
+    text-align: center;
+    color: #c0392b;
 }
 
 .wiki-articles {
@@ -177,7 +278,7 @@
 
 #article-images img {
     width: 100px;
-    padding: 7% ;
+    padding: 7%;
 }
 
 @media only screen and (max-width:580px) {
@@ -188,9 +289,9 @@
         background: #fff;
         color: #323232;
         position: fixed;
-        top: 90vh;
+        top: 85vh;
         width: 100%;
-        height: 11vh;
+        height: 20vh;
         -webkit-transition: height 300ms ease-in-out;
         transition: height 300ms ease-in-out;
     }
@@ -220,15 +321,25 @@
     .info-window p {
         font-size: .75em;
         text-align: center;
-        padding:0;
+        padding: 0;
     }
     #article-images img {
         padding: 7% 10%;
     }
 }
 
+.error {
+    color: rgb(255, 0, 0);
+    text-align: center;
+    padding: 2%;
+}
+
 
 /* Misc Styles*/
+
+ul {
+    padding: 0;
+}
 
 ul,
 li {
