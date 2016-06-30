@@ -35,7 +35,7 @@ function hideMenu() {
 }
 
 /**
- * Used to check if user is on a mobile device. If true, some of the map options will render differently to better fit mobile devices. 
+ * Used to check if user is on a mobile device. If true, some of the map options will render differently to better fit mobile devices. Teken and modified from https://www.abeautifulsite.net/detecting-mobile-devices-with-javascript
  **/
 var isMobile = function() {
     if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i) || navigator.userAgent.match(/Opera Mini/i) || navigator.userAgent.match(/IEMobile/i)) {
@@ -49,7 +49,7 @@ var isMobile = function() {
  * Google Map function and options
  */
 function initMap() {
-    
+
     //returns different lat and lng dependent on users browser type. (mobile or desktop)
     elPasoDowntown = (function() {
         if (isMobile() == false) {
@@ -176,7 +176,7 @@ function infoWindow(place) {
 
         }
     }).error(function() {
-        $('#article-images').append('<h2 class="error">Texas History Articles could not be loaded. Please check your internet connection</h2>')// APi error handling
+        $('#article-images').append('<h2 class="error">Texas History Articles could not be loaded. Please check your internet connection</h2>') // APi error handling
     })
 
     //Wikipedia API Call

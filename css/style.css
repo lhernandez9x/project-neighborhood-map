@@ -1,4 +1,5 @@
 /* Fonts*/
+
 @font-face {
     font-family: 'Rancho';
     src: url('../fonts/Rancho/Rancho.eot');
@@ -13,7 +14,9 @@
     src: url('../fonts/Open/OpenSansRegular.eot') format('embedded-opentype'), url('../fonts/Open/OpenSansRegular.woff2') format('woff2'), url('../fonts/Open/OpenSansRegular.woff') format('woff'), url('../fonts/Open/OpenSansRegular.ttf') format('truetype'), url('../fonts/Open/OpenSansRegular.svg#OpenSansRegular') format('svg');
 }
 
+
 /* Initial Page Styles */
+
 body {
     min-height: 100vh;
     overflow: hidden;
@@ -58,7 +61,8 @@ body {
         background-size: cover;
         margin: 0;
     }
-    #initial-page h1 {;
+    #initial-page h1 {
+        ;
         margin: 0 12%;
         font-size: 3em;
         padding: 15% 0;
@@ -75,7 +79,7 @@ body {
     #initial-page button {
         font-family: 'Open Sans', sans-serif;
         margin-top: 1%;
-        margin-left:25%;
+        margin-left: 25%;
         padding: 3% 5%;
         border: solid 2px #c0392b;
         background: none;
@@ -327,7 +331,9 @@ input:focus {
     }
 }
 
+
 /*Error Message Style*/
+
 .error {
     color: rgb(255, 0, 0);
     text-align: center;
