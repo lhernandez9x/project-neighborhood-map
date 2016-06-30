@@ -67,7 +67,7 @@ body {
     }
     #initial-page p {
         font-family: 'Open Sans', sans-serif;
-        margin-top: 25%;
+        margin-top: 20%;
         padding: 0 2%;
         font-size: 1em;
         color: #fff;
@@ -104,7 +104,7 @@ aside {
     position: fixed;
     top: 0;
     left: 0;
-    height: 9vh;
+    height: 10%;
     width: 20vw;
     background: #fff;
     box-shadow: 1px 2px 5px #474747;
@@ -159,7 +159,7 @@ input:focus {
         position: fixed;
         top: 0;
         left: 0;
-        height: 10vh;
+        height: 12%;
         width: 100vw;
     }
     #nav-bar img {
