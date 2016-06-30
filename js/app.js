@@ -171,7 +171,7 @@ function infoWindow(place) {
             var articles = articleList[i],
                 articleLink = articles.link,
                 articleImg = articles.thumbnail,
-                articleElem = '<a href="' + articleLink + 'hits/?q=' + locationName + '"><img src="' + articleImg + '"></a>'
+                articleElem = '<a href="' + articleLink + 'hits/?q=' + locationName + '" target="_blank"><img src="' + articleImg + '"></a>'
             $('#article-images').append(articleElem);
 
         }
@@ -192,9 +192,9 @@ function infoWindow(place) {
                     articleURL = 'http://en.wikipedia.org/wiki/' + articleStr;
 
                 if (articleStr.includes('El Paso')) {
-                    $('#articles').prepend('<li class="wiki-articles"><a href="' + articleURL + '">' + articleStr + '</a></li>');
+                    $('#articles').prepend('<li class="wiki-articles"><a href="' + articleURL + '" target="_blank">' + articleStr + '</a></li>');
                 } else if (articles.length == 1) {
-                    $('#articles').prepend('<li class="wiki-articles"><a href="' + articleURL + '">' + articleStr + '</a></li>');
+                    $('#articles').prepend('<li class="wiki-articles"><a href="' + articleURL + '" target="_blank">' + articleStr + '</a></li>');
                 } else if (articles.length === null || undefined) {
                     $('#articles').prepend('<h4>Sorry there were 0 articles found for ' + locationName + '</h4>');
                 }
