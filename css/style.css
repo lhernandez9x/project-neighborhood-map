@@ -1,3 +1,4 @@
+/* Fonts*/
 @font-face {
     font-family: 'Rancho';
     src: url('../fonts/Rancho/Rancho.eot');
@@ -12,13 +13,10 @@
     src: url('../fonts/Open/OpenSansRegular.eot') format('embedded-opentype'), url('../fonts/Open/OpenSansRegular.woff2') format('woff2'), url('../fonts/Open/OpenSansRegular.woff') format('woff'), url('../fonts/Open/OpenSansRegular.ttf') format('truetype'), url('../fonts/Open/OpenSansRegular.svg#OpenSansRegular') format('svg');
 }
 
+/* Initial Page Styles */
 body {
     min-height: 100vh;
     overflow: hidden;
-}
-
-section:first-of-type {
-    z-index: 5 !important;
 }
 
 #initial-page {
@@ -27,7 +25,8 @@ section:first-of-type {
 }
 
 #initial-page h1 {
-    margin: 0 40%;
+    margin: 5% 0%;
+    text-align: center;
     color: #c0392b;
     padding: 0;
     font-size: 3em;
@@ -68,7 +67,7 @@ section:first-of-type {
     }
     #initial-page p {
         font-family: 'Open Sans', sans-serif;
-        margin-top: 30%;
+        margin-top: 25%;
         padding: 0 2%;
         font-size: 1em;
         color: #fff;
@@ -85,7 +84,7 @@ section:first-of-type {
 }
 
 
-/* Map */
+/* Map Style */
 
 #map {
     height: 100vh;
@@ -272,7 +271,7 @@ input:focus {
 .info-window p {
     font-family: 'Open Sans', sans-serif;
     font-size: 1em;
-    text-align: center;
+    text-align: justify;
     padding: 0 5%;
 }
 
@@ -320,14 +319,15 @@ input:focus {
     }
     .info-window p {
         font-size: .75em;
-        text-align: center;
-        padding: 0;
+        text-align: justify;
+        padding: 0 10%;
     }
     #article-images img {
         padding: 7% 10%;
     }
 }
 
+/*Error Message Style*/
 .error {
     color: rgb(255, 0, 0);
     text-align: center;

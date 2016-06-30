@@ -15,6 +15,7 @@ var map,
  * Opens menu on mobile to maximize window real estate.
  */
 function openMenu() {
+    closeInfoWindow();
     if (isMobile() == true) {
         $('#menu-bar').css('background', 'rgba(0,0,0,.7)');
         $('#menu-bar').css('transform', 'translateX(0vw)');
