@@ -1,6 +1,8 @@
 ##Project Neighborhood Map for Udacity
 
-You can run the live application  [here](http://lhernandez9x.github.io/project-neighborhood-map).
+You can run the live application [here](http://lhernandez9x.github.io/project-neighborhood-map).
+
+Or, you can also click [here](https://github.com/lhernandez9x/project-neighborhood-map/archive/master.zip) to download a zipped archive the source code.
 
 ### About 
 
