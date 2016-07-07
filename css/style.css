@@ -176,20 +176,29 @@ input:focus {
         top: 20%;
         left: 5%;
     }
-    #menu-bar {
+    .menu-bar {
         -webkit-transform: translateX(100vw);
         transform: translateX(100vw);
     }
-    .menu {
-        margin: 0;
-        overflow-y: scroll;
-        -webkit-transform: translateX(100vw);
-        transform: translateX(100vw);
+    .menu-open{
+        -webkit-transform: translateX(-100vw);
+        transform: translateX(-100vw);
+        background: rgba (0, 0, 0, .7);
+    }
+    .menu-list-open{
+        -webkit-transform: translateX(-100vw);
+        transform: translateX(-100vw);
         -webkit-transition: transform 750ms ease-in-out;
         -webkit-transition: -webkit-transform 750ms ease-in-out;
         transition: -webkit-transform 750ms ease-in-out;
         transition: transform 750ms ease-in-out;
         transition: transform 750ms ease-in-out, -webkit-transform 750ms ease-in-out;
+    }
+    .menu {
+        margin:5% 0 0 0;
+        overflow-y: scroll;
+        -webkit-transform: translateX(100vw);
+        transform: translateX(100vw);
     }
     .menu-item {
         text-align: center;

@@ -14,14 +14,11 @@ var map,
 /**
  * Opens menu on mobile to maximize window real estate.
  */
-function openMenu() {
-    closeInfoWindow();
-    if (isMobile() == true) {
-        $('#menu-bar').css('background', 'rgba(0,0,0,.7)');
-        $('#menu-bar').css('transform', 'translateX(0vw)');
-        $('.menu').css('transform', 'translateX(0vw)');
-    };
-}
+
+$('aside img').click(function(){
+    $('.menu-bar').toggleClass('menu-open');
+    $('.menu').toggleClass('menu-list-open');
+});
 
 /**
  * Closes menu on mobile to maximize window real estate.
@@ -29,8 +26,8 @@ function openMenu() {
 
 function hideMenu() {
     if (isMobile() == true) {
-        $('#menu-bar').removeAttr('style');
-        $('.menu').css('transform', 'translateX(100vw)');
+        $('.menu-bar').toggleClass('menu-open');
+    $('.menu').toggleClass('menu-list-open');
     };
 }
 
@@ -38,34 +35,30 @@ function hideMenu() {
  * Used to check if user is on a mobile device. If true, some of the map options will render differently to better fit mobile devices. Teken and modified from https://www.abeautifulsite.net/detecting-mobile-devices-with-javascript
  **/
 var isMobile = function() {
-     if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i) || navigator.userAgent.match(/Opera Mini/i) || navigator.userAgent.match(/IEMobile/i)){
-         return true;
-     } else {
-         return false;
-     }
+    if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i) || navigator.userAgent.match(/Opera Mini/i) || navigator.userAgent.match(/IEMobile/i)) {
+        return true;
+    } else {
+        return false;
+    }
 };
 
-/**
- * Google Map function and options
- */
-function initMap() {
-
-    //returns different lat and lng dependent on users browser type. (mobile or desktop)
-    elPasoDowntown = (function() {
-        if (!isMobile()) {
-            return {
-                lat: 31.7584309,
-                lng: -106.4886108
-            }
-        } else {
-            return {
-                lat: 31.7583499,
-                lng: -106.487835
-            }
+//returns different lat and lng dependent on users browser type. (mobile or desktop)
+elPasoDowntown = (function() {
+    if (!isMobile()) {
+        return {
+            lat: 31.7584309,
+            lng: -106.4886108
         }
-    })();
+    } else {
+        return {
+            lat: 31.7583499,
+            lng: -106.487835
+        }
+    }
+})();
 
-    console.log(elPasoDowntown);
+
+function initMap() {
 
     //setting the map and map options
     map = new google.maps.Map(document.getElementById('map'), {
@@ -121,7 +114,6 @@ function addMarker(i, place) {
         infoWindow(place);
     })
 }
-
 /**
  * This toggles the marker bounce animation after marker has been clicked. 
  */
@@ -165,7 +157,7 @@ function infoWindow(place) {
      */
     $.ajax({
         url: txHistURL,
-    }).success(function(data) {
+    }).done(function(data) {
         var articleList = data.feed.entry;
 
         // iterates through API response and inputs info into the info window
@@ -195,7 +187,7 @@ function infoWindow(place) {
 
                 if (articleStr.includes('El Paso') || articles.length == 1) {
                     $('#articles').prepend('<li class="wiki-articles"><a href="' + articleURL + '" target="_blank">' + articleStr + '</a></li>');
-                } else if (articles.length === null || undefined) {
+                } else if (articles.length === null) {
                     $('#articles').prepend('<h4>Sorry there were 0 articles found for ' + locationName + '</h4>');
                 }
             }
@@ -251,13 +243,13 @@ var viewModel = function() {
      */
     self.currentMarker = ko.observable('');
     self.setCurrentMarker = function(place) {
-        function menuClick(place) {
+        function placeClick(place) {
             infoWindow(place);
             map.setCenter(place.location);
             map.setZoom(18);
             toggleBounce(place);
         };
-        google.maps.event.trigger(place, 'click', menuClick(place));
+        google.maps.event.trigger(place, 'click', placeClick(place));
     }
 
     /**
@@ -288,7 +280,6 @@ var viewModel = function() {
         }
         return filteredList;
     })
-
 }
 initMap();
 ko.applyBindings(new viewModel());
