@@ -82,6 +82,8 @@ function initMap() {
             }]
         }]
     });
+    
+    ko.applyBindings(new viewModel());
 };
 
 /**
@@ -187,7 +189,8 @@ function infoWindow(place) {
 
                 if (articleStr.includes('El Paso') || articles.length == 1) {
                     $('#articles').prepend('<li class="wiki-articles"><a href="' + articleURL + '" target="_blank">' + articleStr + '</a></li>');
-                } else if (articles.length === null) {
+                    console.log(articles);
+                } else if (articles.length == 0) {
                     $('#articles').prepend('<h4>Sorry there were 0 articles found for ' + locationName + '</h4>');
                 }
             }
@@ -281,5 +284,3 @@ var viewModel = function() {
         return filteredList;
     })
 }
-initMap();
-ko.applyBindings(new viewModel());
