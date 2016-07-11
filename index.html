@@ -16,7 +16,7 @@
 
 <body>
     <section id="initial-page">
-        <h1>El Paso Downtown Historic Ditrict Map</h1>
+        <h1>El Paso Downtown Historic District Map</h1>
         <p>El Paso, located at the western tip of Texas, is a city rich in history. El Paso was first inhabited back in 1598. It was a bussling cow-town during the Old West, and it's still a thriving city today. Explore El Paso and enjoy our history.</p>
         <button id="explore-btn">Click to Start Exploring</button>
     </section>
@@ -43,20 +43,27 @@
         exploreElem.addEventListener('click', function() {
             bodyElem.removeChild(initialPageElem);
             $('aside').css('visibility', 'visible');
-
+            
+            if(window.innerWidth <= 739){
+                $('#nav-bar img').css('visibility', 'visible');
+            }
+            
         });
-
-
+        
         /**
          * error handling if map doesn't load
          */
         function mapError() {
             $('body').html('<h1 class="error"> OOPS! It looks like someone tripped over the wireless cord. There is no internet connection right now And I can\'t get the map. Please try again once you are back online. ');
         }
+        function initGMap(){
+            
+        }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlCLIDC79QmG6TvNSfymRpKR3hjvFCaSY" onerror="mapError()"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlCLIDC79QmG6TvNSfymRpKR3hjvFCaSY" onerror="mapError()" async></script>
     <script src="js//model/model.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/app.js" async defer></script>
+
 </body>
 
 </html>

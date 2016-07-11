@@ -38,11 +38,11 @@ function hideMenu() {
  * Used to check if user is on a mobile device. If true, some of the map options will render differently to better fit mobile devices. Teken and modified from https://www.abeautifulsite.net/detecting-mobile-devices-with-javascript
  **/
 var isMobile = function() {
-    if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i) || navigator.userAgent.match(/Opera Mini/i) || navigator.userAgent.match(/IEMobile/i)) {
-        return true;
-    } else {
-        return false;
-    }
+     if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i) || navigator.userAgent.match(/Opera Mini/i) || navigator.userAgent.match(/IEMobile/i)){
+         return true;
+     } else {
+         return false;
+     }
 };
 
 /**
@@ -52,7 +52,7 @@ function initMap() {
 
     //returns different lat and lng dependent on users browser type. (mobile or desktop)
     elPasoDowntown = (function() {
-        if (isMobile() == false) {
+        if (!isMobile()) {
             return {
                 lat: 31.7584309,
                 lng: -106.4886108
@@ -65,12 +65,14 @@ function initMap() {
         }
     })();
 
+    console.log(elPasoDowntown);
+
     //setting the map and map options
     map = new google.maps.Map(document.getElementById('map'), {
         center: elPasoDowntown,
         zoom: (function() {
-            if (isMobile() === true) {
-                return 16;
+            if (isMobile()) {
+                return 17;
             } else {
                 return 18;
             }
@@ -152,7 +154,7 @@ function infoWindow(place) {
          */
         wikiRequestTimeout = setTimeout(function() {
             $('#articles').prepend('<h2 class="error">Wikipedia Articles could not be loaded. Please check your internet connection</h2>');
-        }, 8000);
+        }, 1000);
 
 
     // Appends all elements to info window
@@ -191,9 +193,7 @@ function infoWindow(place) {
                 var articleStr = articles[i],
                     articleURL = 'http://en.wikipedia.org/wiki/' + articleStr;
 
-                if (articleStr.includes('El Paso')) {
-                    $('#articles').prepend('<li class="wiki-articles"><a href="' + articleURL + '" target="_blank">' + articleStr + '</a></li>');
-                } else if (articles.length == 1) {
+                if (articleStr.includes('El Paso') || articles.length == 1) {
                     $('#articles').prepend('<li class="wiki-articles"><a href="' + articleURL + '" target="_blank">' + articleStr + '</a></li>');
                 } else if (articles.length === null || undefined) {
                     $('#articles').prepend('<h4>Sorry there were 0 articles found for ' + locationName + '</h4>');
@@ -290,7 +290,5 @@ var viewModel = function() {
     })
 
 }
-
-//Initialize map on page.
 initMap();
 ko.applyBindings(new viewModel());

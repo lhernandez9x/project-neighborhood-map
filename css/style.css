@@ -158,18 +158,18 @@ input:focus {
     color: #ecf0f1;
 }
 
-@media only screen and (max-width:640px) {
+@media only screen and (max-width:740px) {
     #nav-bar {
         position: fixed;
         top: 0;
         left: 0;
-        height: 12%;
+        height: 75px;
         width: 100vw;
     }
     #nav-bar img {
         display: block;
-        visibility: visible;
-        padding: 2vh 0 0 85vw;
+        visibility: hidden;
+        padding: 15px 0 0 85vw;
     }
     input {
         position: absolute;
@@ -202,6 +202,8 @@ input:focus {
         border-bottom: none;
     }
 }
+
+
 
 
 /* Info Window Styles*/
@@ -350,6 +352,9 @@ ul {
 ul,
 li {
     list-style: none;
+}
+li{
+    cursor: pointer;
 }
 
 a {
