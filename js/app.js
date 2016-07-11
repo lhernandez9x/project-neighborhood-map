@@ -3,10 +3,11 @@
 // Declare global variables
 var map,
     place,
-    marker,
-    markers = [],
+    marker = ko.observable(),
+    markers = ko.observableArray(),
     elPasoDowntown,
-    txHistArticles = [];
+    articles,
+    allArticles;
 
 
 // Any additional scripts for our view will be housed here.
@@ -15,7 +16,7 @@ var map,
  * Opens menu on mobile to maximize window real estate.
  */
 
-$('aside img').click(function(){
+$('aside img').click(function() {
     $('.menu-bar').toggleClass('menu-open');
     $('.menu').toggleClass('menu-list-open');
 });
@@ -27,7 +28,7 @@ $('aside img').click(function(){
 function hideMenu() {
     if (isMobile() == true) {
         $('.menu-bar').toggleClass('menu-open');
-    $('.menu').toggleClass('menu-list-open');
+        $('.menu').toggleClass('menu-list-open');
     };
 }
 
@@ -82,7 +83,7 @@ function initMap() {
             }]
         }]
     });
-    
+
     ko.applyBindings(new viewModel());
 };
 
@@ -130,6 +131,8 @@ function toggleBounce(place) {
     }
 }
 
+
+
 /**
  * Add infoWindow to each marker and list item
  */
@@ -137,11 +140,11 @@ function infoWindow(place) {
     var locationName = place.title,
         locationDesc = place.description,
         locationCategory = place.category,
-        infoSectionElem = $('#info-section'), // gets the infoWindow element
+        infoWindowElem = $('#info-section'),
 
         //API urls
         txHistURL = 'https://texashistory.unt.edu/explore/collections/EPMT/opensearch/?q=' + place.title + '&format=json', // API url for Texas History
-        wikiURL = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + locationName + '&limit=500&format=json&callback=wikiResponse', // API url for Wikipedia
+        wikiURL = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + place.title + '&limit=500&format=json&callback=wikiResponse', // API url for Wikipedia
 
         /**
          * Create timeout for error handling on Wikipedia API
@@ -149,14 +152,11 @@ function infoWindow(place) {
         wikiRequestTimeout = setTimeout(function() {
             $('#articles').prepend('<h2 class="error">Wikipedia Articles could not be loaded. Please check your internet connection</h2>');
         }, 1000);
-
-
+    
     // Appends all elements to info window
-    infoSectionElem.html('<div class="info-window"> <button class="close-button" onclick="closeInfoWindow()">x</button> <button class="more-button" onclick="moreInfo()">More</button> <h3 class="location-title">' + locationName + '</h3> <p><span class="category">Categories: <em>' + locationCategory + '</em></span></p> <p class="location-desc">' + locationDesc + '</p> <h4>Click below to go to the Wikipedia page for ' + locationName + '</h4> <div id="articles"> <h4>Click images below to see historical newspapers about ' + locationName + '</h4> <div id="article-images"></div></div></div>');
+    infoWindowElem.html('<div class="info-window"> <button class="close-button" onclick="closeInfoWindow()">x</button> <button class="more-button" onclick="moreInfo()">More</button> <h3 class="location-title">' + locationName + '</h3> <p><span class="category">Categories: <em>' + locationCategory + '</em></span></p> <p class="location-desc">' + locationDesc + '</p> <h4 class="iw-title">Click below to go to the Wikipedia page for ' + locationName + '</h4> <div id="articles"> <h4 class="iw-title">Click images below to see historical newspapers about ' + locationName + '</h4> <div id="article-images"></div></div></div>');
 
-    /**
-     * This calls the Texas History api and inputs info into the corresponding info window.
-     */
+    // TX Hist Api Call
     $.ajax({
         url: txHistURL,
     }).done(function(data) {
@@ -171,7 +171,7 @@ function infoWindow(place) {
             $('#article-images').append(articleElem);
 
         }
-    }).error(function() {
+    }).fail(function() {
         $('#article-images').append('<h2 class="error">Texas History Articles could not be loaded. Please check your internet connection</h2>') // APi error handling
     })
 
@@ -183,15 +183,17 @@ function infoWindow(place) {
         success: function(response) {
             var articles = response[1];
 
-            for (var i = 0; i < articles.length; i++) {
-                var articleStr = articles[i],
-                    articleURL = 'http://en.wikipedia.org/wiki/' + articleStr;
+            if (articles.length == 0) {
+                $('#articles').prepend('<h4 class="no-articles">Sorry there were 0 articles found for ' + locationName + '</h4>');
+            } else {
 
-                if (articleStr.includes('El Paso') || articles.length == 1) {
-                    $('#articles').prepend('<li class="wiki-articles"><a href="' + articleURL + '" target="_blank">' + articleStr + '</a></li>');
-                    console.log(articles);
-                } else if (articles.length == 0) {
-                    $('#articles').prepend('<h4>Sorry there were 0 articles found for ' + locationName + '</h4>');
+                for (var i = 0; i < articles.length; i++) {
+                    var articleStr = articles[i],
+                        articleURL = 'http://en.wikipedia.org/wiki/' + articleStr;
+
+                    if (articleStr.includes('El Paso') || articles.length == 1) {
+                        $('#articles').prepend('<li class="wiki-articles"><a href="' + articleURL + '" target="_blank">' + articleStr + '</a></li>');
+                    }
                 }
             }
             clearInterval(wikiRequestTimeout);
@@ -223,6 +225,9 @@ function moreInfo() {
  */
 var viewModel = function() {
     var self = this;
+
+    allArticles = ko.observableArray();
+    console.log(allArticles());
 
     //observable arry that holds all locations
     self.unfilteredLocations = ko.observableArray();
