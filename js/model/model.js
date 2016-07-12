@@ -185,12 +185,4 @@ var places = [{
         lat: 31.759447,
         lng: -106.487829
     }
-}, {
-    title: 'S. H. Kress Building',
-    description: 'The Kress Building was designed by the company architect Edward Sibbert in 1938 for the S.H. Kress and Company which operated a five-and-ten-cent store at this location from 1938 until 1997. The El Paso store, together with New York City\’s Fifth Avenue store, were said to be Sibbert\’s favorite Kress stores. The building has three street elevations onto Mesa, Mills, and Oregon streets, unique among all the Kress stores. The building is a dramatic display of terra-cotta in oyster white. A Kress Company leaflet described the building as “modified Spanish architecture to comply with a special request of the Woman\’s Division of the Chamber of Commerce that we design a building in keeping with the colorful history of this locality.” The principal feature, the corner tower, stands eighty feet high and was designed to highlight El Paso\’s layered history and cultural diversity. Historical markers include El Paso\’s Chinese Community and United States Courthouse.',
-    category: ['Early Years', 'Old-West'],
-    location: {
-        lat: 31.759110,
-        lng: -106.488389
-    }
 }];

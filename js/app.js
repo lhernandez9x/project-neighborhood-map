@@ -152,25 +152,34 @@ function infoWindow(place) {
         wikiRequestTimeout = setTimeout(function() {
             $('#articles').prepend('<h2 class="error">Wikipedia Articles could not be loaded. Please check your internet connection</h2>');
         }, 1000);
-    
+
     // Appends all elements to info window
-    infoWindowElem.html('<div class="info-window"> <button class="close-button" onclick="closeInfoWindow()">x</button> <button class="more-button" onclick="moreInfo()">More</button> <h3 class="location-title">' + locationName + '</h3> <p><span class="category">Categories: <em>' + locationCategory + '</em></span></p> <p class="location-desc">' + locationDesc + '</p> <h4 class="iw-title">Click below to go to the Wikipedia page for ' + locationName + '</h4> <div id="articles"> <h4 class="iw-title">Click images below to see historical newspapers about ' + locationName + '</h4> <div id="article-images"></div></div></div>');
+    infoWindowElem.html('<div class="info-window"> <button class="close-button" onclick="closeInfoWindow()">x</button> <button class="more-button" onclick="moreInfo()">More</button> <h3 class="location-title">' + locationName + '</h3> <p><span class="category">Categories: <em>' + locationCategory + '</em></span></p> <p class="location-desc">' + locationDesc + '</p> <h4 class="iw-title">Click below to go to the Wikipedia page for ' + locationName + '</h4> <div id="articles"> <h4 class="iw-title">Click images below to see historical newspapers about ' + locationName + '</h4> <div id="article-images" data-bind="foreach: allArticles()"><a href="" data-bind="attr:{href: link, title: title}"><img src="" data-bind="attr:{src: img}"></a></div></div></div>');
 
     // TX Hist Api Call
     $.ajax({
         url: txHistURL,
     }).done(function(data) {
         var articleList = data.feed.entry;
-
+        
+        allArticles().length = 0; // clear allArticles array
         // iterates through API response and inputs info into the info window
-        for (let i = 0; i < articleList.length; i++) {
+        articleList.forEach(function(article, i){
             var articles = articleList[i],
                 articleLink = articles.link,
+                articleTitle = articles.title,
                 articleImg = articles.thumbnail,
-                articleElem = '<a href="' + articleLink + 'hits/?q=' + locationName + '" target="_blank"><img src="' + articleImg + '"></a>'
-            $('#article-images').append(articleElem);
-
-        }
+                articleElem = '<a href="' + articleLink + 'hits/?q=' + locationName + '" target="_blank"><img src="' + articleImg + '"></a>',
+                parsedArticles = {
+                    title: articleTitle,
+                    img: articleImg,
+                    link: articleLink
+                };
+            allArticles().push(parsedArticles);
+        })
+        
+        console.log('allArticles:', allArticles());
+        
     }).fail(function() {
         $('#article-images').append('<h2 class="error">Texas History Articles could not be loaded. Please check your internet connection</h2>') // APi error handling
     })
