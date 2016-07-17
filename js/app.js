@@ -7,7 +7,6 @@ var map,
     markers = ko.observableArray(),
     elPasoDowntown,
     articles,
-    allArticles,
     vm;
 
 
@@ -27,10 +26,10 @@ $('aside img').click(function() {
  */
 
 function hideMenu() {
-    if (isMobile() == true) {
+    if (isMobile()) {
         $('.menu-bar').toggleClass('menu-open');
         $('.menu').toggleClass('menu-list-open');
-    };
+    }
 }
 
 /**
@@ -50,12 +49,12 @@ elPasoDowntown = (function() {
         return {
             lat: 31.7584309,
             lng: -106.4886108
-        }
+        };
     } else {
         return {
             lat: 31.7583499,
             lng: -106.487835
-        }
+        };
     }
 })();
 
@@ -84,9 +83,9 @@ function initMap() {
             }]
         }]
     });
-    vm = new viewModel()
+    vm = new viewModel();
     ko.applyBindings(vm);
-};
+}
 
 /**
  * funtion that will create map markers and add to our map
@@ -99,7 +98,7 @@ function addMarker(i, place) {
         icon: 'images/marker.png',
         title: location.title,
         animation: google.maps.Animation.DROP
-    })
+    });
 
     places[i].marker = marker; // bind marker to places
     markers.push(marker); // pushes markers to array
@@ -117,7 +116,7 @@ function addMarker(i, place) {
         toggleBounce(place);
         infoWindow(place);
         $('#info-section').css('display', 'inherit');
-    })
+    });
 }
 /**
  * This toggles the marker bounce animation after marker has been clicked. 
@@ -142,10 +141,9 @@ function infoWindow(place) {
     vm.locationName(place.title);
     vm.locationDesc(place.description);
     vm.locationCategory(place.category);
-    var infoWindowElem = $('#info-section'),
 
-        //API urls
-        txHistURL = 'https://texashistory.unt.edu/explore/collections/EPMT/opensearch/?q=' + place.title + '&format=json', // API url for Texas History
+    //API urls
+    var txHistURL = 'https://texashistory.unt.edu/explore/collections/EPMT/opensearch/?q=' + place.title + '&format=json', // API url for Texas History
         wikiURL = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + place.title + '&limit=500&format=json&callback=wikiResponse', // API url for Wikipedia
 
         /**
@@ -172,8 +170,8 @@ function infoWindow(place) {
 
         }
     }).fail(function() {
-        $('#article-images').append('<h2 class="error">Texas History Articles could not be loaded. Please check your internet connection</h2>') // APi error handling
-    })
+        $('#article-images').append('<h2 class="error">Texas History Articles could not be loaded. Please check your internet connection</h2>'); // APi error handling
+    });
 
     //Wikipedia API Call
 
@@ -209,7 +207,7 @@ function infoWindow(place) {
             }
             clearInterval(wikiRequestTimeout);
         }
-    })
+    });
     return false;
 }
 
@@ -220,10 +218,10 @@ function closeInfoWindow() {
     var iw = $('.info-window');
 
     $('#info-section').css('display', 'none');
-    iw.css('top', '')
+    iw.css('top', '');
     iw.css('height', '');
     iw.css('overflow', '');
-};
+}
 
 /**
  * Increases the height of the infoWindow in order to show the rest of the information on mobile devices
@@ -231,10 +229,10 @@ function closeInfoWindow() {
 
 function moreInfo() {
     var infoWindowElem = $('.info-window');
-    infoWindowElem.css('top', '0')
+    infoWindowElem.css('top', '0');
     infoWindowElem.css('height', '100vh');
     infoWindowElem.css('overflow', 'scroll');
-};
+}
 
 /**
  * This is our view model
@@ -263,7 +261,7 @@ var viewModel = function() {
         // pushes all locations to array
         //used for initial and unfiltered lists and markers
         self.unfilteredLocations().push(place);
-    };
+    }
 
     /**
      * Calls out info window when menu item is clicked
@@ -275,9 +273,9 @@ var viewModel = function() {
             map.setCenter(place.location);
             map.setZoom(18);
             toggleBounce(place);
-        };
+        }
         google.maps.event.trigger(place, 'click', placeClick(place));
-    }
+    };
 
     /**
      * Gets the value in search bar and filters all locations. Once locations are filtered they will be pushed to filtered array.
@@ -303,8 +301,8 @@ var viewModel = function() {
                     place.marker.setVisible(false);
                 }
                 return false;
-            })
+            });
         }
         return filteredList;
-    })
-}
+    });
+};
