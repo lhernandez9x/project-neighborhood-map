@@ -219,6 +219,7 @@ input:focus {
 
 #info-section {
     position: relative;
+    display: none;
     z-index: 10;
 }
 
@@ -290,9 +291,10 @@ input:focus {
     padding: 0 5%;
 }
 
-#article-images img {
-    width: 100px;
-    padding: 7%;
+.papers{
+    width:auto;
+    display:inline-block;
+    padding:7%;
 }
 
 .no-articles {
@@ -301,7 +303,7 @@ input:focus {
     text-align: center;
     border:none;
     margin:0;
-    padding: 2% 20%;
+    padding: 5% 20%;
 }
 
 @media only screen and (max-width:580px) {
