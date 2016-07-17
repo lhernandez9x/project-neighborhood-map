@@ -22,7 +22,7 @@
     </section>
     <aside id="nav-bar">
         <form id="search-box">
-            <input type="search" placeholder="Filter Locations" data-bind="textInput: searchValue, valueUpdate: keyup" />
+            <input type="search" placeholder="Filter Locations" data-bind="textInput: searchValue" />
         </form>
         <img src="images/menu.png" alt="Menu Icon">
         <div class="menu-bar">
@@ -33,7 +33,26 @@
     </aside>
     <section id="map">
     </section>
-    <div id="info-section"></div>
+    <aside id="info-section">
+        <div class="info-window">
+            <button class="close-button" onclick="closeInfoWindow()">x</button>
+            <button class="more-button" onclick="moreInfo()">More</button>
+            <h3 class="location-title" data-bind="text: locationName"></h3>
+            <p><span class="category">Categories: <em data-bind="text: locationCategory"></em></span></p>
+            <p class="location-desc" data-bind="text: locationDesc"></p>
+            <h4 class="iw-title">Click below to go to the Wikipedia page for <span data-bind="text: locationName"></span></h4>
+            <ul id="articles" data-bind="foreach: wikiArticles">
+                <li class="wiki-articles">
+                    <a data-bind="text: $data.title, attr:{ href: $data.link}, visible: $data.link " target="_blank"></a>
+                    <p class="no-articles" data-bind="text: $data.title, visible: !$data.link"></p>
+                </li>
+            </ul>
+                <h4 class="iw-title">Click images below to see historical newspapers about <span data-bind="text: locationName"></span></h4>
+            <ul id="article-images" data-bind="foreach: papers">
+                <li class="papers"><a data-bind="attr: {href: $data.link}"><img data-bind="attr: {src: $data.img}"></a></li>
+            </ul>
+        </div>
+    </aside>
     <script>
         var bodyElem = document.body,
             initialPageElem = document.getElementById('initial-page'),
