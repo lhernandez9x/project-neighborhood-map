@@ -7,7 +7,8 @@ var map,
     markers = ko.observableArray(),
     elPasoDowntown,
     articles,
-    allArticles;
+    allArticles,
+    vm;
 
 
 // Any additional scripts for our view will be housed here.
@@ -83,8 +84,8 @@ function initMap() {
             }]
         }]
     });
-
-    ko.applyBindings(new viewModel());
+    vm = new viewModel()
+    ko.applyBindings(vm);
 };
 
 /**
@@ -115,6 +116,7 @@ function addMarker(i, place) {
         })();
         toggleBounce(place);
         infoWindow(place);
+        $('#info-section').css('display', 'inherit');
     })
 }
 /**
@@ -137,10 +139,10 @@ function toggleBounce(place) {
  * Add infoWindow to each marker and list item
  */
 function infoWindow(place) {
-    var locationName = place.title,
-        locationDesc = place.description,
-        locationCategory = place.category,
-        infoWindowElem = $('#info-section'),
+    vm.locationName(place.title);
+    vm.locationDesc(place.description);
+    vm.locationCategory(place.category);
+    var infoWindowElem = $('#info-section'),
 
         //API urls
         txHistURL = 'https://texashistory.unt.edu/explore/collections/EPMT/opensearch/?q=' + place.title + '&format=json', // API url for Texas History
@@ -152,23 +154,21 @@ function infoWindow(place) {
         wikiRequestTimeout = setTimeout(function() {
             $('#articles').prepend('<h2 class="error">Wikipedia Articles could not be loaded. Please check your internet connection</h2>');
         }, 1000);
-    
-    // Appends all elements to info window
-    infoWindowElem.html('<div class="info-window"> <button class="close-button" onclick="closeInfoWindow()">x</button> <button class="more-button" onclick="moreInfo()">More</button> <h3 class="location-title">' + locationName + '</h3> <p><span class="category">Categories: <em>' + locationCategory + '</em></span></p> <p class="location-desc">' + locationDesc + '</p> <h4 class="iw-title">Click below to go to the Wikipedia page for ' + locationName + '</h4> <div id="articles"> <h4 class="iw-title">Click images below to see historical newspapers about ' + locationName + '</h4> <div id="article-images"></div></div></div>');
 
     // TX Hist Api Call
     $.ajax({
         url: txHistURL,
     }).done(function(data) {
-        var articleList = data.feed.entry;
+        vm.papers([]);
+        var articleList = data.feed.entry,
+            paper = {};
 
         // iterates through API response and inputs info into the info window
         for (let i = 0; i < articleList.length; i++) {
-            var articles = articleList[i],
-                articleLink = articles.link,
-                articleImg = articles.thumbnail,
-                articleElem = '<a href="' + articleLink + 'hits/?q=' + locationName + '" target="_blank"><img src="' + articleImg + '"></a>'
-            $('#article-images').append(articleElem);
+            var articles = articleList[i];
+            paper.link = articles.link;
+            paper.img = articles.thumbnail;
+            vm.papers.push(paper);
 
         }
     }).fail(function() {
@@ -181,20 +181,31 @@ function infoWindow(place) {
         url: wikiURL,
         dataType: 'jsonp',
         success: function(response) {
-            var articles = response[1];
+            vm.wikiArticles([]);
+            var articles = response[1],
+                article = {};
 
-            if (articles.length == 0) {
-                $('#articles').prepend('<h4 class="no-articles">Sorry there were 0 articles found for ' + locationName + '</h4>');
-            } else {
+            //sets articles without 'El Paso' to false
+            var hasElPaso = false;
 
+            if (articles.length > 0) {
                 for (var i = 0; i < articles.length; i++) {
-                    var articleStr = articles[i],
-                        articleURL = 'http://en.wikipedia.org/wiki/' + articleStr;
-
+                    var articleStr = articles[i];
                     if (articleStr.includes('El Paso') || articles.length == 1) {
-                        $('#articles').prepend('<li class="wiki-articles"><a href="' + articleURL + '" target="_blank">' + articleStr + '</a></li>');
+                        article.title = articleStr;
+                        article.link = 'http://en.wikipedia.org/wiki/' + articleStr;
+                        vm.wikiArticles.push(article);
+
+                        hasElPaso = true;
                     }
                 }
+            }
+            // fallback if no articles or if none are of El Paso
+
+            if (!hasElPaso) {
+                article.title = 'Sorry there were 0 Articles found for ' + vm.locationName();
+                article.link = '';
+                vm.wikiArticles.push(article);
             }
             clearInterval(wikiRequestTimeout);
         }
@@ -206,7 +217,12 @@ function infoWindow(place) {
  *This function closes our info window, so user can go to other location.
  */
 function closeInfoWindow() {
-    $('#info-section').html('');
+    var iw = $('.info-window');
+
+    $('#info-section').css('display', 'none');
+    iw.css('top', '')
+    iw.css('height', '');
+    iw.css('overflow', '');
 };
 
 /**
@@ -215,7 +231,7 @@ function closeInfoWindow() {
 
 function moreInfo() {
     var infoWindowElem = $('.info-window');
-    infoWindowElem.css('top', '10vh')
+    infoWindowElem.css('top', '0')
     infoWindowElem.css('height', '100vh');
     infoWindowElem.css('overflow', 'scroll');
 };
@@ -226,8 +242,11 @@ function moreInfo() {
 var viewModel = function() {
     var self = this;
 
-    allArticles = ko.observableArray();
-    console.log(allArticles());
+    self.locationName = ko.observable();
+    self.locationDesc = ko.observable();
+    self.locationCategory = ko.observable();
+    self.wikiArticles = ko.observableArray();
+    self.papers = ko.observableArray();
 
     //observable arry that holds all locations
     self.unfilteredLocations = ko.observableArray();
