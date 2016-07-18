@@ -105,14 +105,10 @@ function addMarker(i, place) {
 
     //This adds a click event listener to each marker
     marker.addListener('click', function() {
-        map.setCenter(place.location);
-        (function() {
-            if (isMobile() === true) {
-                return map.setZoom(18);
-            } else {
-                return map.setZoom(19);
-            }
-        })();
+        map.panTo(place.location);
+        map.setZoom(18);
+        
+        //calls our infoWindow and our toggleBounce functions
         toggleBounce(place);
         infoWindow(place);
         $('#info-section').css('display', 'inherit');
@@ -128,7 +124,7 @@ function toggleBounce(place) {
         place.marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function() {
             place.marker.setAnimation(null);
-        }, 1420);
+        }, 1400);
     }
 }
 
@@ -266,15 +262,12 @@ var viewModel = function() {
     /**
      * Calls out info window when menu item is clicked
      */
-    self.currentMarker = ko.observable('');
     self.setCurrentMarker = function(place) {
-        function placeClick(place) {
+        $('#info-section').css('display', 'inherit');
             infoWindow(place);
-            map.setCenter(place.location);
-            map.setZoom(18);
+        map.panTo(place.location);
             toggleBounce(place);
-        }
-        google.maps.event.trigger(place, 'click', placeClick(place));
+        google.maps.event.trigger(marker, 'click');
     };
 
     /**

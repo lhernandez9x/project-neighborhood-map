@@ -61,6 +61,7 @@ body {
         background-size: cover;
         margin: 0;
     }
+    
     #initial-page h1 {
         ;
         margin: 0 12%;
@@ -69,6 +70,7 @@ body {
         color: #c0392b;
         text-shadow: 0 0 100px #bdc3c7;
     }
+    
     #initial-page p {
         font-family: 'Open Sans', sans-serif;
         margin-top: 20%;
@@ -76,6 +78,7 @@ body {
         font-size: 1em;
         color: #fff;
     }
+    
     #initial-page button {
         font-family: 'Open Sans', sans-serif;
         margin-top: 1%;
@@ -159,6 +162,7 @@ input:focus {
 }
 
 @media only screen and (max-width:740px) {
+    
     #nav-bar {
         position: fixed;
         top: 0;
@@ -166,25 +170,30 @@ input:focus {
         height: 75px;
         width: 100vw;
     }
+    
     #nav-bar img {
         display: block;
         visibility: hidden;
         padding: 15px 0 0 85vw;
     }
+    
     input {
         position: absolute;
         top: 20%;
         left: 5%;
     }
+    
     .menu-bar {
         -webkit-transform: translateX(100vw);
         transform: translateX(100vw);
     }
+    
     .menu-open {
         -webkit-transform: translateX(-100vw);
         transform: translateX(-100vw);
         background: rgba (0, 0, 0, .7);
     }
+    
     .menu-list-open {
         -webkit-transform: translateX(-100vw);
         transform: translateX(-100vw);
@@ -194,12 +203,14 @@ input:focus {
         transition: transform 750ms ease-in-out;
         transition: transform 750ms ease-in-out, -webkit-transform 750ms ease-in-out;
     }
+    
     .menu {
         margin: 5% 0 0 0;
         overflow-y: visible;
         -webkit-transform: translateX(100vw);
         transform: translateX(100vw);
     }
+    
     .menu-item {
         text-align: center;
         color: #fff;
@@ -207,6 +218,7 @@ input:focus {
         background: #c0392b;
         border-bottom: solid 1px #fff;
     }
+    
     .menu-item:last-child {
         border-bottom: none;
     }
@@ -308,6 +320,7 @@ input:focus {
     #info-section {
         position: relative;
     }
+    
     .info-window {
         background: #fff;
         color: #323232;
@@ -318,6 +331,7 @@ input:focus {
         -webkit-transition: height 300ms ease-in-out;
         transition: height 300ms ease-in-out;
     }
+    
     .info-window h3 {
         text-align: center;
         font-size: 1em;
@@ -328,24 +342,29 @@ input:focus {
         margin-top: 1%;
         font-family: 'Open Sans', sans-serif;
     }
+    
     .info-window button {
         background: #c0392b;
         color: #fff;
         border: none;
     }
+    
     .close-button {
         width: 37px;
         margin-right: 2%;
     }
+    
     .more-button {
         width: 50px;
         display: inline-block;
     }
+    
     .info-window p {
         font-size: .75em;
         text-align: justify;
         padding: 0 10%;
     }
+    
     #article-images img {
         padding: 7% 10%;
     }

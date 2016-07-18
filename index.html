@@ -9,9 +9,6 @@
 
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
-
-    <script src="js/libs/knockout-3.4.0.js"></script>
-    <script src="js/libs/jquery-3.0.0.min.js"></script>
 </head>
 
 <body>
@@ -22,7 +19,7 @@
     </section>
     <aside id="nav-bar">
         <form id="search-box">
-            <input type="search" placeholder="Filter Locations" data-bind="textInput: searchValue" />
+            <input type="search" placeholder="Filter Locations" data-bind="textInput: searchValue">
         </form>
         <img src="images/menu.png" alt="Menu Icon">
         <div class="menu-bar">
@@ -74,6 +71,8 @@
             $('body').html('<h1 class="error"> OOPS! It looks like someone tripped over the wireless cord. There is no internet connection right now And I can\'t get the map. Please try again once you are back online. ');
         };
     </script>
+    <script src="js/libs/knockout-3.4.0.js"></script>
+    <script src="js/libs/jquery-3.0.0.min.js"></script>
     <script src="js//model/model.js"></script>
     <script src="js/app.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlCLIDC79QmG6TvNSfymRpKR3hjvFCaSY&callback=initMap" async defer onerror="mapError()"></script>
