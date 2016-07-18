@@ -107,11 +107,12 @@ function addMarker(i, place) {
     marker.addListener('click', function() {
         map.panTo(place.location);
         map.setZoom(18);
-        
+
         //calls our infoWindow and our toggleBounce functions
         toggleBounce(place);
         infoWindow(place);
-        $('#info-section').css('display', 'inherit');
+        vm.infoWindowVisible(true);
+        //$('#info-section').css('display', 'inherit');
     });
 }
 /**
@@ -211,12 +212,16 @@ function infoWindow(place) {
  *This function closes our info window, so user can go to other location.
  */
 function closeInfoWindow() {
-    var iw = $('.info-window');
+    
+    vm.infoWindowVisible(false);
 
-    $('#info-section').css('display', 'none');
-    iw.css('top', '');
-    iw.css('height', '');
-    iw.css('overflow', '');
+    if (isMobile) {
+        var iw = $('.info-window');
+        iw.css('top', '');
+        iw.css('height', '');
+        iw.css('overflow', '');
+    }
+
 }
 
 /**
@@ -241,6 +246,7 @@ var viewModel = function() {
     self.locationCategory = ko.observable();
     self.wikiArticles = ko.observableArray();
     self.papers = ko.observableArray();
+    self.infoWindowVisible = ko.observable(false);
 
     //observable arry that holds all locations
     self.unfilteredLocations = ko.observableArray();
@@ -263,10 +269,10 @@ var viewModel = function() {
      * Calls out info window when menu item is clicked
      */
     self.setCurrentMarker = function(place) {
-        $('#info-section').css('display', 'inherit');
-            infoWindow(place);
+        vm.infoWindowVisible(true);
+        infoWindow(place);
         map.panTo(place.location);
-            toggleBounce(place);
+        toggleBounce(place);
         google.maps.event.trigger(marker, 'click');
     };
 

@@ -229,7 +229,6 @@ input:focus {
 
 #info-section {
     position: relative;
-    display: none;
     z-index: 10;
 }
 
